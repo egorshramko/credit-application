@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width-device-width, initial-scale=1">
+
+    <!--meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0"-->
+
+    <title>Кредитование ФЛ</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js"></script>
+
+
+</head>
+<body>
+
+    <div class="container-xl py-5 gy-2">
+        <ul class="nav nav-tabs" id="home-page-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="search-tab"
+                        data-bs-toggle="tab" data-bs-target="#search"
+                        type="button" role="tab" aria-controls="search"
+                        aria-selected="true">
+                    Поиск
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="processes-tab"
+                        data-bs-toggle="tab" data-bs-target="#processes"
+                        type="button" role="tab" aria-controls="processes"
+                        aria-selected="false">
+                    Процессы
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content" id="home-page-tab-content">
+            <div class="tab-pane fade show active" id="search" role="tabpanel" aria-labelledby="search-tab">
+                <!--Форма поиска-->
+                <form>
+                    <div class="container">
+                        <div class="row mt-3">
+                            <div class="col-4 px-2">
+                                <label for="lastname-input" class="form-label">Фамилия</label>
+                                <input class="form-control" type="text" id="lastname-input"
+                                       autocomplete="off"
+                                />
+                                <div class="invalid-feedback">
+                                    <span>Допустимые символы: кириллица, -, пробел</span>
+                                </div>
+                            </div>
+                            <div class="col-4 px-2">
+                                <label for="firstname-input" class="form-label">Имя</label>
+                                <input class="form-control" type="text" id="firstname-input"
+                                       autocomplete="off"
+                                />
+                                <div class="invalid-feedback">
+                                    <span>Допустимые символы: кириллица, -, пробел</span>
+                                </div>
+                            </div>
+                            <div class="col-4 px-2">
+                                <label for="middlename-input" class="form-label">Отчество</label>
+                                <input class="form-control" type="text" id="middlename-input"
+                                       autocomplete="off"
+                                />
+                                <div class="invalid-feedback">
+                                    <span>Допустимые символы: кириллица, -, пробел</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-4 px-2">
+                                <label for="birthdate-input" class="form-label">Дата рождения</label>
+                                <input class="form-control" type="date" id="birthdate-input"
+                                       autocomplete="off"
+                                />
+                            </div>
+                            <div class="col-4 px-2">
+                                <label for="passport-series-input" class="form-label">Серия паспорта</label>
+                                <input class="form-control" type="text"
+                                       id="passport-series-input" placeholder="__ __" autocomplete="off"
+                                />
+                            </div>
+                            <div class="col-4 px-2">
+                                <label for="passport-number-input" class="form-label">Номер паспорта</label>
+                                <input class="form-control" type="text"
+                                       id="passport-number-input" placeholder="______" autocomplete="off"
+                                />
+                            </div>
+                        </div>
+                        <div class="row mt-3 flex-row-reverse">
+                            <div class="col-4 px-2 d-flex flex-row-reverse">
+                                <button type="submit" id="search-client-button" class="btn btn-primary disabled">Поиск</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="processes" role="tabpanel" aria-labelledby="processes-tab">
+                <p>Здесь будет содержимое вкладки процессы</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/static/js/home.js"></script>
+
+
+
+</body>
+</html>
