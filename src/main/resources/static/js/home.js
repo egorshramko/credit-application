@@ -95,6 +95,75 @@ function search_client_button_click_handler() {
     }
     else {
         let search_form = document.getElementById('search-client-form')
-        search_form.submit();
+        
+        //формируем AJAX-запрос к ресурсу /search
+
+        //Получаем значения полей формы
+        var lastname_input = $("#lastname-input").val();
+        var firstname_input = $("#firstname-input").val();
+        var middlename_input = $("#middlename-input").val();
+        var birthdate_input = $("#birthdate-input").val();
+        var passport_series = $("#passport-series-input").val();
+        var passport_number = $("#passport-number-input").val();
+
+        var response_table;
+        $.ajax({
+            url: '/api/clients/search',
+            method: 'get',
+            dataType: 'json',
+            data: {
+                lastname: lastname_input,
+                firstname: firstname_input,
+                middlename: middlename_input,
+                birthdate: birthdate_input,
+                passportSeries: passport_series,
+                passportNumber: passport_number
+            },
+            success: function (data) {
+                show_found_clients(data);
+            }
+        });
+
     }
+}
+
+//Функция показа найденных клиентов
+function show_found_clients(data) {
+    var clients_table_body = $("#clients-table-body");
+    clients_table_body.empty();
+
+    //создаем строки в таблице для каждого клиента
+    data.forEach(function (client) {
+        
+        var new_row = document.createElement('tr');
+        new_row.setAttribute('data-client-id', client.id);
+
+        //записываем фамилию
+        var lastname_column = document.createElement('td');
+        lastname_column.textContent = client.lastname;
+        new_row.appendChild(lastname_column);
+
+        //записываем имя
+        var firstname_column = document.createElement('td');
+        firstname_column.textContent = client.firstname;
+        new_row.appendChild(firstname_column);
+
+        //записываем отчество
+        var middlename_column = document.createElement('td');
+        middlename_column.textContent = client.middlename;
+        new_row.appendChild(middlename_column);
+
+        //записываем серию паспорта
+        var passport_series_column = document.createElement('td');
+        passport_series_column.textContent = client.passportSeries;
+        new_row.appendChild(passport_series_column);
+
+        //записываем номер паспорта
+        var passport_number_column = document.createElement('td');
+        passport_number_column.textContent = client.passportNumber;
+        new_row.appendChild(passport_number_column);
+
+        clients_table_body.append(new_row);
+
+    });
 }

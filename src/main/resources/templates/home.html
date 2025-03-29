@@ -5,10 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width-device-width, initial-scale=1">
 
-    <!--meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0"-->
-
     <title>Кредитование ФЛ</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -50,7 +46,7 @@
                             <div class="col-4 px-2">
                                 <label for="lastname-input" class="form-label">Фамилия</label>
                                 <input class="form-control" type="text" id="lastname-input"
-                                       autocomplete="off"
+                                       autocomplete="off" name="lastname"
                                 />
                                 <div class="invalid-feedback">
                                     <span>Допустимые символы: кириллица, -, пробел</span>
@@ -59,7 +55,7 @@
                             <div class="col-4 px-2">
                                 <label for="firstname-input" class="form-label">Имя</label>
                                 <input class="form-control" type="text" id="firstname-input"
-                                       autocomplete="off"
+                                       autocomplete="off" name="firstname"
                                 />
                                 <div class="invalid-feedback">
                                     <span>Допустимые символы: кириллица, -, пробел</span>
@@ -68,7 +64,7 @@
                             <div class="col-4 px-2">
                                 <label for="middlename-input" class="form-label">Отчество</label>
                                 <input class="form-control" type="text" id="middlename-input"
-                                       autocomplete="off"
+                                       autocomplete="off" name="middlename"
                                 />
                                 <div class="invalid-feedback">
                                     <span>Допустимые символы: кириллица, -, пробел</span>
@@ -79,19 +75,21 @@
                             <div class="col-4 px-2">
                                 <label for="birthdate-input" class="form-label">Дата рождения</label>
                                 <input class="form-control" type="date" id="birthdate-input"
-                                       autocomplete="off"
+                                       autocomplete="off" name="birthdate"
                                 />
                             </div>
                             <div class="col-4 px-2">
                                 <label for="passport-series-input" class="form-label">Серия паспорта</label>
                                 <input class="form-control" type="text"
                                        id="passport-series-input" placeholder="__ __" autocomplete="off"
+                                       name="passportSeries"
                                 />
                             </div>
                             <div class="col-4 px-2">
                                 <label for="passport-number-input" class="form-label">Номер паспорта</label>
                                 <input class="form-control" type="text"
                                        id="passport-number-input" placeholder="______" autocomplete="off"
+                                       name="passportNumber"
                                 />
                             </div>
                         </div>
@@ -113,9 +111,16 @@
                                 <th scope="col">Номер паспорта</th>
                             </tr>
                         </thead>
-                        <tbody>
-
+                        <tbody id="clients-table-body">
+                            <!--tr th:each="client : ${clients}">
+                                <td th:text="${client.lastname}">LASTNAME</td>
+                                <td th:text="${client.firstname}">FIRSTNAME</td>
+                                <td th:text="${client.middlename}">MIDDLENAME</td>
+                                <td th:text="${client.passportSeries}">SERIES</td>
+                                <td th:text="${client.passportNumber}">NUMBER</td>
+                            </tr-->
                         </tbody>
+                        <!--Здесь должна быть таблица клиентов-->
                     </table>
                 </div>
             </div>
