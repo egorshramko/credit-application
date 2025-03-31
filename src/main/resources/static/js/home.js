@@ -155,12 +155,12 @@ function show_found_clients(data) {
 
         //записываем серию паспорта
         var passport_series_column = document.createElement('td');
-        passport_series_column.textContent = client.passportSeries;
+        passport_series_column.textContent = client.passport.series;
         new_row.appendChild(passport_series_column);
 
         //записываем номер паспорта
         var passport_number_column = document.createElement('td');
-        passport_number_column.textContent = client.passportNumber;
+        passport_number_column.textContent = client.passport.number;
         new_row.appendChild(passport_number_column);
 
         clients_table_body.append(new_row);

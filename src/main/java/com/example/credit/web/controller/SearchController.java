@@ -4,7 +4,11 @@ import com.example.credit.data.Client;
 import com.example.credit.data.repository.ClientRepository;
 import com.example.credit.web.api.dto.ClientDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
 
 
 @Slf4j
@@ -13,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
                 produces = "application/json")
 public class SearchController {
 
-    private final ClientRepository clientRepository;
+    ClientRepository clientRepository;
 
     public SearchController(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
@@ -21,7 +25,7 @@ public class SearchController {
 
     @GetMapping(params="all")
     public Iterable<Client> getAllClients() {
-        return clientRepository.getAllClients();
+        return clientRepository.findAll();
     }
 
     @GetMapping(params={"lastname", "firstname", "middlename",
@@ -29,10 +33,19 @@ public class SearchController {
                         "passportNumber"})
     public Iterable<Client> getClientsByFilter(@ModelAttribute ClientDTO searchRequest) {
 
-        return clientRepository.getClientsByFilter(searchRequest.getLastname(),
+        LocalDate requestBirthdate;
+        try {
+            requestBirthdate = LocalDate.parse(searchRequest.getBirthdate());
+        }
+        catch (DateTimeException err) {
+            requestBirthdate = null;
+        }
+
+        return clientRepository.getClientsBySearchFilter(
+                searchRequest.getLastname(),
                 searchRequest.getFirstname(),
                 searchRequest.getMiddlename(),
-                searchRequest.getBirthdate(),
+                requestBirthdate,
                 searchRequest.getPassportSeries(),
                 searchRequest.getPassportNumber());
 
