@@ -81,6 +81,7 @@ function highlight_invalid_field(element, input_valid) {
 function search_client_button_click_handler() {
 
     console.log("Запущен обработчик нажатия поиска");
+    $("#search-client-button").blur();
 
     let lastname_valid = check_input($("#lastname-input"));
     let firstname_valid = check_input($("#firstname-input"));
@@ -132,11 +133,37 @@ function show_found_clients(data) {
     var clients_table_body = $("#clients-table-body");
     clients_table_body.empty();
 
+    /*
+    * Если клиентов не нашли, то делаем кнопку "Оформить кредит" неактивной,
+    * а кнопку "Создать клиента" активной.
+    * В ином случае делаем обе кнопки неактивными
+    */ 
+    if (!$("#apply-loan-btn").hasClass("disabled")) {
+        $("#apply-loan-btn").addClass("disabled");
+    }
+    if (!data || data.length == 0) {
+        if ($("#create-client-btn").hasClass("disabled")) {
+            $("#create-client-btn").removeClass("disabled");
+            console.log("Активировали кнопку создать клиента");
+        }
+    }
+    else {
+        if (!$("#create-client-btn").hasClass("disabled")) {
+            $("#create-client-btn").addClass("disabled");
+            console.log("Деактивировали кнопку создать клиента");
+        }
+    }
+
     //создаем строки в таблице для каждого клиента
     data.forEach(function (client) {
         
         var new_row = document.createElement('tr');
         new_row.setAttribute('data-client-id', client.id);
+
+        //добавляем строке обработку клика
+        new_row.addEventListener("click", function (event) {
+            clients_table_row_clicked(event);
+        });
 
         //записываем фамилию
         var lastname_column = document.createElement('td');
@@ -166,4 +193,38 @@ function show_found_clients(data) {
         clients_table_body.append(new_row);
 
     });
+}
+
+function clients_table_row_clicked(event) {
+    var clicked_row = event.target.parentNode;
+    var table_body = clicked_row.parentNode;
+
+    if (event.ctrlKey) {
+        if (clicked_row.classList.contains('selected')) {
+            clicked_row.classList.remove('selected');
+
+            if (!$("#apply-loan-btn").hasClass('disabled')) {
+                $("#apply-loan-btn").addClass('disabled');
+            }
+        }
+    }
+    else {
+        var all_table_rows = table_body.childNodes;
+        all_table_rows.forEach(function (current_table_row) {
+            if (current_table_row.classList.contains('selected') && current_table_row != clicked_row) {
+                current_table_row.classList.remove('selected');
+            }
+        });
+
+        if (!clicked_row.classList.contains('selected')) {
+            clicked_row.classList.add('selected');
+        }
+
+        if ($("#apply-loan-btn").hasClass('disabled')) {
+            $("#apply-loan-btn").removeClass('disabled');
+        }
+
+        console.log("Выбрали строку с клиентом: " + clicked_row.getAttribute('data-client-id'));
+    }
+
 }

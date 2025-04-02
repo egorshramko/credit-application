@@ -22,8 +22,8 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
             "(:lastname is null or :lastname = '' or cl.lastname = :lastname) and " +
             "(:firstname is null or :firstname = '' or cl.firstname = :firstname) and " +
             "(:middlename is null or :middlename = '' or cl.middlename = :middlename) and " +
-            "(cast(:birthdate as date) is null or " +
-            "cast(cl.birthdate as date) = cast(:birthdate as date)) and " +
+            "(cast(cast(:birthdate as text) as date) is null or " +
+            "cast(cl.birthdate as date) = cast(cast(:birthdate as text) as date)) and " +
             "(:passport_series is null or :passport_series = '' or pas.series = :passport_series) and " +
             "(:passport_number is null or :passport_number = '' or pas.number = :passport_number)"
     )

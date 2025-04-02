@@ -1,0 +1,6 @@
+.table tr {
+    cursor: default;
+}
+.table tr.selected {
+    background-color: #cecece;
+}
