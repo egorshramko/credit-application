@@ -7,6 +7,9 @@ $("#middlename-input").on('input', middlename_input_handler);
 
 $("#search-client-button").on('click', search_client_button_click_handler);
 
+$("#create-client-btn").on('click', create_client_button_clicked);
+$("#apply-loan-btn").on('click', apply_loan_button_clicked);
+
 //обработчик ввода фамилии
 function lastname_input_handler() {
 
@@ -109,7 +112,7 @@ function search_client_button_click_handler() {
 
         var response_table;
         $.ajax({
-            url: '/api/clients/search',
+            url: '/api/search/clients',
             method: 'get',
             dataType: 'json',
             data: {
@@ -195,10 +198,12 @@ function show_found_clients(data) {
     });
 }
 
+//Обработчик нажатия на строку таблицы клиентов
 function clients_table_row_clicked(event) {
     var clicked_row = event.target.parentNode;
     var table_body = clicked_row.parentNode;
 
+    //если был нажат ctrl, то нужно снять выделение
     if (event.ctrlKey) {
         if (clicked_row.classList.contains('selected')) {
             clicked_row.classList.remove('selected');
@@ -227,4 +232,53 @@ function clients_table_row_clicked(event) {
         console.log("Выбрали строку с клиентом: " + clicked_row.getAttribute('data-client-id'));
     }
 
+}
+
+//обработчик нажатия на кнопку "Создать клиента"
+function create_client_button_clicked() {
+    console.log("Нажали на кнопку создать клиента");
+    
+    //устанавливаем путь для отправки запроса
+    var search_form = document.getElementById('search-client-form');
+    search_form.action = './create-client';
+    search_form.method = 'post';
+    console.log(search_form);
+
+    var clients_table_body = document.getElementById('clients-table-body');
+    
+    //проверка на случай несанкционированного вмешательство в код элемента
+    if (clients_table_body.childNodes.length == 0) {
+        search_form.submit();
+    }
+    else {
+        console.warn("Таблица клиентов не пуста! Отправка формы невозможна.");
+    }
+}
+
+//обработчик нажатия на кнопку "Оформить кредит"
+function apply_loan_button_clicked() {
+    console.log("Нажали на кнопку оформить кредит");
+
+    //устанавливаем путь для отправки запроса
+    var search_form = document.getElementById('search-client-form');
+    search_form.action = './apply-loan';
+    search_form.method = 'post';
+    
+    var clients_table_body = document.getElementById('clients-table-body');
+    var selected_row = clients_table_body.querySelector('.selected');
+
+    //проверка на случай несанкционированного вмешательство в код элемента
+    if (!!selected_row) {
+        var selected_client_input = document.getElementById('selected-client-input');
+        selected_client_input.value = selected_row.getAttribute('data-client-id');
+
+        search_form.submit();
+    }
+    else {
+        console.warn("Не выбрана строка в таблице! Отправка формы невозможна.");
+    }
+
+    
+
+   
 }

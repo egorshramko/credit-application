@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan({"com.example.credit.web", "com.example.credit.data.repository"})
 @EntityScan("com.example.credit.data")
 @EnableJpaRepositories("com.example.credit.data.repository")
 public class CreditApplication {
