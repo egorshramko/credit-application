@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,10 +18,15 @@ import java.time.LocalDate;
 public class ClientProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "client_profile_seq",
+            sequenceName = "client_profile_pkey_sequence",
+            initialValue = 1,
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_profile_seq")
     private Long id;
 
-    private final LocalDate createdDate = LocalDate.now();
+    private final LocalDateTime createdDate = LocalDateTime.now();
 
     @NotNull
     @NotEmpty
@@ -48,6 +55,7 @@ public class ClientProfile {
     @Size(max = 2000)
     private String citizenship;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
     @NotEmpty
     private Sex sex;
@@ -59,5 +67,9 @@ public class ClientProfile {
     private Boolean consentPersonalData;
 
     private String comment;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile")
+    private List<Contact> contacts;
 
 }

@@ -1,9 +1,6 @@
 package com.example.credit.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,10 +17,15 @@ import java.time.LocalDateTime;
 public class Passport {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "passport_seq",
+            sequenceName = "passport_pkey_sequence",
+            initialValue = 1,
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "passport_seq")
     private Long id;
 
-    private LocalDateTime createdDate = LocalDateTime.now();
+    private final LocalDateTime createdDate = LocalDateTime.now();
 
     @NotNull
     @NotEmpty

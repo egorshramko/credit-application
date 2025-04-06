@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -17,16 +18,22 @@ import java.time.LocalDate;
 public class Credit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "credit_seq",
+            sequenceName = "credit_pkey_sequence",
+            initialValue = 1,
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credit_seq")
     private Long id;
 
-    private final LocalDate createdDate = LocalDate.now();
+    private final LocalDateTime createdDate = LocalDateTime.now();
 
     @NotNull
     @NotEmpty
     @ManyToOne
     private Client borrower;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
     @NotEmpty
     private CreditStage stage;

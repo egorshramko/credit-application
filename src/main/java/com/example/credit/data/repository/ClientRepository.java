@@ -3,15 +3,15 @@ package com.example.credit.data.repository;
 import com.example.credit.data.Client;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-
+@Repository
 public interface ClientRepository extends CrudRepository<Client, Long> {
 
     List<Client> getClientsByLastnameAndFirstname(String lastname, String firstname);

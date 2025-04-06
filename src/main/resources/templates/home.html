@@ -139,12 +139,19 @@
                             </tr>
                             </thead>
                             <tbody id="active-app-table-body">
-                                <!--Динамическая таблица кредитов на оформлении-->
+                                <tr th:value="${credit.id}" th:each="credit : ${openedCredits}">
+                                    <td th:text="${#temporals.format(credit.createdDate, 'dd.MM.yyyy HH:mm:ss')}"></td>
+                                    <td th:text="${credit.borrower.lastname + ' ' +
+                                        credit.borrower.firstname + ' ' +
+                                        credit.borrower.middlename}"></td>
+                                    <td th:text="${credit.id}"></td>
+                                    <td th:text="${credit.stage.displayValue}"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="container d-flex border rounded py-2 mx-0">
-                        <button id="select-process-btn" type="button" class="btn btn-info mx-1">Выбор процесса</button>
+                        <button id="select-process-btn" type="button" class="btn btn-info mx-1 disabled">Выбор процесса</button>
                     </div>
                 </div>
             </div>

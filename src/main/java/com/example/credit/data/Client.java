@@ -20,7 +20,12 @@ import java.time.LocalDateTime;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "client_seq",
+            sequenceName = "client_pkey_sequence",
+            initialValue = 1,
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
     private Long id;
 
     private final LocalDateTime createdDate = LocalDateTime.now();
@@ -44,6 +49,7 @@ public class Client {
     @Size(max=2000)
     private String citizenship;
 
+    @Enumerated(EnumType.STRING)
     private Sex sex;
 
     @OneToOne

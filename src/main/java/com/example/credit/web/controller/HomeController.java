@@ -1,13 +1,30 @@
 package com.example.credit.web.controller;
 
+import com.example.credit.data.Credit;
+import com.example.credit.service.CreditService;
 import com.example.credit.web.api.dto.ClientDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Controller
+@RequestMapping
 public class HomeController {
+
+    @Autowired
+    private CreditService creditService;
+
+    @ModelAttribute("openedCredits")
+    public Iterable<Credit> addOpenedCredits(Model model) {
+
+        return creditService.getActiveCredits();
+
+    }
 
     @GetMapping("/")
     public String getHomePage() {
@@ -28,9 +45,9 @@ public class HomeController {
         log.info("series: " + clientDto.getPassportSeries());
         log.info("number: " + clientDto.getPassportNumber());
 
+        Credit credit = creditService.createCreditForNewClient(clientDto);
 
-
-        return "redirect:/credit";
+        return "redirect:/credit/" + credit.getId();
     }
 
     //Оформление кредита для существующего клиента
@@ -40,7 +57,16 @@ public class HomeController {
         log.info("Request data:");
         log.info("id: " + id);
 
-        return "redirect:/credit";
+        try {
+            Credit credit = creditService.createCreditForExistClient(id);
+            return "redirect:/credit/" + credit.getId();
+        }
+        catch (RuntimeException err) {
+            err.printStackTrace();
+        }
+
+        return "redirect:/";
+
     }
 
 

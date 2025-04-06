@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -18,11 +19,17 @@ import java.time.LocalDate;
 public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "contact_seq",
+            sequenceName = "contact_pkey_sequence",
+            initialValue = 1,
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_seq")
     private Long id;
 
-    private final LocalDate createdDate = LocalDate.now();
+    private final LocalDateTime createdDate = LocalDateTime.now();
 
+    @Enumerated(EnumType.STRING)
     @NotNull
     @NotEmpty
     private ContactType contactType;
@@ -31,8 +38,5 @@ public class Contact {
     private String phoneNumber;
 
     private String comment;
-
-    @ManyToOne
-    private ClientProfile profile;
 
 }
