@@ -1,3 +1,7 @@
+$("#passport-series-input").click().mask("99 99");
+$("#passport-number-input").click().mask("999999");
+$("#passport-department-code-input").click().mask("999-999");
+
 $("#lastname-input").on('input', lastname_input_handler);
 $("#firstname-input").on('input', firstname_input_handler);
 $("#middlename-input").on('input', middlename_input_handler);

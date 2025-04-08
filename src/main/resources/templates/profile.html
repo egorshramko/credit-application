@@ -23,9 +23,9 @@
                 <h2>Заполнение анкеты</h2>
             </div>
             <div class="container mt-3">
-                <form id="profile-form">
+                <form id="profile-form" th:object="${credit.profile}">
                     <div class="row">
-                        <div class="col-6 border rounded py-2">
+                        <div class="col-6 border rounded py-2 mb-2">
                             <div class="row">
                                 <div class="col-12 px-2">
                                     <h4>Персональная информация</h4>
@@ -35,7 +35,7 @@
                                 <div class="col-4 px-2">
                                     <label for="lastname-input" class="form-label">Фамилия</label>
                                     <input class="form-control" type="text" id="lastname-input"
-                                           autocomplete="off" name="lastname" th:value="${credit.profile.lastname}"
+                                           autocomplete="off" name="lastname" th:value="*{lastname}"
                                     />
                                     <div class="invalid-feedback">
                                         <span>Допустимые символы: кириллица, -, пробел</span>
@@ -44,7 +44,7 @@
                                 <div class="col-4 px-2">
                                     <label for="firstname-input" class="form-label">Имя</label>
                                     <input class="form-control" type="text" id="firstname-input"
-                                           autocomplete="off" name="firstname" th:value="${credit.profile.firstname}"
+                                           autocomplete="off" name="firstname" th:value="*{firstname}"
                                     />
                                     <div class="invalid-feedback">
                                         <span>Допустимые символы: кириллица, -, пробел</span>
@@ -53,7 +53,7 @@
                                 <div class="col-4 px-2">
                                     <label for="middlename-input" class="form-label">Отчество</label>
                                     <input class="form-control" type="text" id="middlename-input"
-                                           autocomplete="off" name="middlename" th:value="${credit.profile.middlename}"
+                                           autocomplete="off" name="middlename" th:value="*{middlename}"
                                     />
                                     <div class="invalid-feedback">
                                         <span>Допустимые символы: кириллица, -, пробел</span>
@@ -64,13 +64,13 @@
                                 <div class="col-4 px-2">
                                     <label for="birthdate-input" class="form-label">Дата рождения</label>
                                     <input class="form-control" type="date" id="birthdate-input"
-                                           autocomplete="off" name="birthdate" th:value="${credit.profile.birthdate}"
+                                           autocomplete="off" name="birthdate" th:value="*{birthdate}"
                                     />
                                 </div>
                                 <div class="col-4 px-2">
                                     <label for="citizenship-input" class="form-label">Гражданство</label>
                                     <input class="form-control" type="text" id="citizenship-input"
-                                           autocomplete="off" name="citizenship" th:value="${credit.profile.citizenship}"
+                                           autocomplete="off" name="citizenship" th:value="*{citizenship}"
                                     />
                                 </div>
                                 <div class="col-4 px-2">
@@ -84,6 +84,55 @@
                         </div>
                         <div class="col-6">
                             <!--Здесь будет виджет с фотографией-->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 border rounded mb-2 py-2">
+                            <div class="row">
+                                <h4 class="d-flex justify-content-center">Паспорт</h4>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="passport-series-input" class="form-label">Серия паспорта</label>
+                                    <input class="form-control" type="text"
+                                           id="passport-series-input" placeholder="__ __" autocomplete="off"
+                                           name="passportSeries" th:value="*{passport.series}"
+                                    />
+                                </div>
+                                <div class="col-6">
+                                    <label for="passport-number-input" class="form-label">Номер паспорта</label>
+                                    <input class="form-control" type="text"
+                                           id="passport-number-input" placeholder="______" autocomplete="off"
+                                           name="passportNumber" th:value="*{passport.number}"
+                                    />
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-6">
+                                    <label for="passport-issue-date-input" class="form-label">Дата выдачи</label>
+                                    <input class="form-control" type="date"
+                                           id="passport-issue-date-input" autocomplete="off"
+                                           name="issueDate" th:value="*{passport.issueDate}"
+                                    />
+                                </div>
+                                <div class="col-6">
+                                    <label for="passport-department-code-input" class="form-label">Код подразделения</label>
+                                    <input class="form-control" type="text"
+                                           id="passport-department-code-input" placeholder="___-___"
+                                           autocomplete="off"
+                                           name="departmentCode" th:value="*{passport.departmentCode}"
+                                    />
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <label for="passport-issue-place-input" class="form-label">Кем выдан</label>
+                                    <input class="form-control" type="text"
+                                           id="passport-issue-place-input" autocomplete="off"
+                                           name="issuePlace" th:value="*{passport.issuePlace}"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
 

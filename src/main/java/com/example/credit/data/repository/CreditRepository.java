@@ -12,7 +12,8 @@ public interface CreditRepository extends CrudRepository<Credit, Long> {
     @Query("Select cr from Credit cr " +
             "left join cr.borrower cl " +
             "where " +
-            "cr.stage != 'COMPLETED'")
+            "cr.stage != 'COMPLETED'" +
+            "order by cr.createdDate asc")
     Iterable<Credit> getActiveCredits();
 
 }

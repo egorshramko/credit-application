@@ -113,6 +113,7 @@ public class CreditServiceImpl implements CreditService {
                     .firstname(borrower.getFirstname())
                     .middlename(borrower.getMiddlename())
                     .birthdate(borrower.getBirthdate())
+                    .passport(borrower.getPassport())
                     .citizenship(borrower.getCitizenship())
                     .sex(borrower.getSex())
                     .tin(borrower.getTin())
