@@ -1,8 +1,10 @@
 package com.example.credit.service.impl;
 
 import com.example.credit.data.Client;
+import com.example.credit.data.ClientProfile;
 import com.example.credit.data.Credit;
 import com.example.credit.data.enums.CreditStage;
+import com.example.credit.data.repository.ClientProfileRepository;
 import com.example.credit.data.repository.CreditRepository;
 import com.example.credit.service.ClientService;
 import com.example.credit.service.CreditService;
@@ -24,6 +26,9 @@ public class CreditServiceImpl implements CreditService {
     @Autowired
     private CreditRepository creditRepository;
 
+    @Autowired
+    private ClientProfileRepository profileRepository;
+
     /**
      * Метод создает объект кредита для нового клиента
      * @param clientDto - транспортный объект из запроса с данными нового клиента
@@ -36,7 +41,15 @@ public class CreditServiceImpl implements CreditService {
         Client borrower = clientService.createClient(clientDto);
 
         //создаем объект кредита
-        Credit createdCredit = creditRepository.save(new Credit(null, borrower, CreditStage.CREDIT_FORM, null));
+        Credit createdCredit = creditRepository.save(
+                Credit.builder()
+                        .borrower(borrower)
+                        .stage(CreditStage.CREDIT_FORM)
+                        .build()
+        );
+
+        //создаем анкету с данными клиента
+        this.fillCreditProfile(createdCredit);
 
         log.info("Created credit with id: " + createdCredit.getId());
 
@@ -52,13 +65,14 @@ public class CreditServiceImpl implements CreditService {
             Client borrower = borrowerContainer.get();
 
             Credit createdCredit = creditRepository.save(
-                    new Credit(
-                            null,
-                            borrower,
-                            CreditStage.CREDIT_FORM,
-                            null
-                    )
+                    Credit.builder()
+                            .borrower(borrower)
+                            .stage(CreditStage.CREDIT_FORM)
+                            .build()
             );
+
+            //создаем анкету с данными клиента
+            this.fillCreditProfile(createdCredit);
 
             log.info("Created credit with id: " + createdCredit.getId());
 
@@ -75,7 +89,8 @@ public class CreditServiceImpl implements CreditService {
 
         Optional<Credit> desiredCreditOrNull = creditRepository.findById(Long.parseLong(creditId));
 
-        return desiredCreditOrNull.orElse(null);
+        //fillCreditProfile вызывается для дополнительной проверки наличия анкеты у кредита
+        return desiredCreditOrNull.map(this::fillCreditProfile).orElse(null);
 
     }
 
@@ -84,6 +99,33 @@ public class CreditServiceImpl implements CreditService {
 
         return creditRepository.getActiveCredits();
 
+    }
+
+    @Override
+    public Credit fillCreditProfile(Credit credit) {
+
+        Client borrower = credit.getBorrower();
+        if (credit.getProfile() == null && borrower != null) {
+
+            //создаем анкету с данными найденного клиента
+            ClientProfile profile = profileRepository.save(ClientProfile.builder()
+                    .lastname(borrower.getLastname())
+                    .firstname(borrower.getFirstname())
+                    .middlename(borrower.getMiddlename())
+                    .birthdate(borrower.getBirthdate())
+                    .citizenship(borrower.getCitizenship())
+                    .sex(borrower.getSex())
+                    .tin(borrower.getTin())
+                    //.contacts(borrower.getContacts())
+                    .build()
+            );
+
+            credit.setProfile(profile);
+
+            return creditRepository.save(credit);
+        }
+
+        return credit;
     }
 
 }

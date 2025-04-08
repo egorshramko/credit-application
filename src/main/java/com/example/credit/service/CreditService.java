@@ -12,4 +12,6 @@ public interface CreditService {
 
     Iterable<Credit> getActiveCredits();
 
+    Credit fillCreditProfile(Credit credit);
+
 }

@@ -2,6 +2,7 @@ package com.example.credit.web.controller;
 
 import com.example.credit.data.Credit;
 import com.example.credit.data.enums.CreditStage;
+import com.example.credit.data.enums.Sex;
 import com.example.credit.service.CreditService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.thymeleaf.exceptions.TemplateInputException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -22,6 +25,13 @@ public class CreditController {
 
     @Autowired
     private CreditService creditService;
+
+    @ModelAttribute("sex")
+    public Sex[] addSexEnumToModel(Model model) {
+
+        return Sex.values();
+
+    }
 
     @GetMapping
     public String getCreditStageView(@PathVariable("id") String creditId,
@@ -56,17 +66,16 @@ public class CreditController {
 
     @GetMapping("/profile")
     public String getProfilePage(@PathVariable("id") String creditId,
-                                 @ModelAttribute("credit") Credit credit,
                                  Model model) {
 
-        //Credit credit = creditService.getCreditById(creditId);
-        //model.addAttribute("credit", credit);
-
-        if (credit == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Credit application not found");
+        if (!model.containsAttribute("credit")) {
+            return "redirect:/credit/" + creditId;
         }
 
         return "profile";
+
+
+
     }
 
 }

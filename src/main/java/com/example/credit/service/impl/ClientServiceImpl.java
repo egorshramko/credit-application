@@ -55,14 +55,10 @@ public class ClientServiceImpl implements ClientService {
     public Client createClient(ClientDto clientDto) {
 
         Passport clientPassport = passportRepository.save(
-                new Passport(
-                        null,
-                        clientDto.getPassportSeries(),
-                        clientDto.getPassportNumber(),
-                        null,
-                        null,
-                        null
-                )
+                Passport.builder()
+                        .series(clientDto.getPassportSeries())
+                        .number(clientDto.getPassportNumber())
+                        .build()
         );
 
         LocalDate clientBirthdate;
@@ -75,16 +71,13 @@ public class ClientServiceImpl implements ClientService {
         }
 
         return clientRepository.save(
-                new Client(null,
-                        clientDto.getLastname(),
-                        clientDto.getFirstname(),
-                        clientDto.getMiddlename(),
-                        clientBirthdate,
-                        null,
-                        null,
-                        null,
-                        clientPassport
-                )
+                Client.builder()
+                        .lastname(clientDto.getLastname())
+                        .firstname(clientDto.getFirstname())
+                        .middlename(clientDto.getMiddlename())
+                        .birthdate(clientBirthdate)
+                        .passport(clientPassport)
+                        .build()
         );
     }
 

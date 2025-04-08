@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org/">
 
@@ -14,6 +15,85 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js"></script>
     </head>
     <body>
-        <h3>Вы открыли анкету кредита с ID: <span th:text="${credit.id}"></span></h3>
+        <div class="container mt-3 mb-3">
+            <a href="/">Вернуться на главную</a>
+        </div>
+        <div class="container border rounded">
+            <div class="container mt-3">
+                <h2>Заполнение анкеты</h2>
+            </div>
+            <div class="container mt-3">
+                <form id="profile-form">
+                    <div class="row">
+                        <div class="col-6 border rounded py-2">
+                            <div class="row">
+                                <div class="col-12 px-2">
+                                    <h4>Персональная информация</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-4 px-2">
+                                    <label for="lastname-input" class="form-label">Фамилия</label>
+                                    <input class="form-control" type="text" id="lastname-input"
+                                           autocomplete="off" name="lastname" th:value="${credit.profile.lastname}"
+                                    />
+                                    <div class="invalid-feedback">
+                                        <span>Допустимые символы: кириллица, -, пробел</span>
+                                    </div>
+                                </div>
+                                <div class="col-4 px-2">
+                                    <label for="firstname-input" class="form-label">Имя</label>
+                                    <input class="form-control" type="text" id="firstname-input"
+                                           autocomplete="off" name="firstname" th:value="${credit.profile.firstname}"
+                                    />
+                                    <div class="invalid-feedback">
+                                        <span>Допустимые символы: кириллица, -, пробел</span>
+                                    </div>
+                                </div>
+                                <div class="col-4 px-2">
+                                    <label for="middlename-input" class="form-label">Отчество</label>
+                                    <input class="form-control" type="text" id="middlename-input"
+                                           autocomplete="off" name="middlename" th:value="${credit.profile.middlename}"
+                                    />
+                                    <div class="invalid-feedback">
+                                        <span>Допустимые символы: кириллица, -, пробел</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-4 px-2">
+                                    <label for="birthdate-input" class="form-label">Дата рождения</label>
+                                    <input class="form-control" type="date" id="birthdate-input"
+                                           autocomplete="off" name="birthdate" th:value="${credit.profile.birthdate}"
+                                    />
+                                </div>
+                                <div class="col-4 px-2">
+                                    <label for="citizenship-input" class="form-label">Гражданство</label>
+                                    <input class="form-control" type="text" id="citizenship-input"
+                                           autocomplete="off" name="citizenship" th:value="${credit.profile.citizenship}"
+                                    />
+                                </div>
+                                <div class="col-4 px-2">
+                                    <label for="sex-input" class="form-label">Пол</label>
+                                    <select class="form-select" id="sex-input">
+                                        <option selected>&lt;Не выбрано&gt;</option>
+                                        <option th:each="s : ${sex}" th:text="${s.displayValue}" th:value="${s}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <!--Здесь будет виджет с фотографией-->
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="/static/js/profile.js"></script>
+
     </body>
 </html>

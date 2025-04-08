@@ -9,6 +9,7 @@ $("#search-client-button").on('click', search_client_button_click_handler);
 
 $("#create-client-btn").on('click', create_client_button_clicked);
 $("#apply-loan-btn").on('click', apply_loan_button_clicked);
+$("#select-process-btn").on('click', select_process_btn_clicked);
 
 //обработчик ввода фамилии
 function lastname_input_handler() {
@@ -281,4 +282,62 @@ function apply_loan_button_clicked() {
     
 
    
+}
+
+function active_app_row_clicked(event, row) {
+
+    var table_body = row.parentNode;
+
+    //если был нажат ctrl, то нужно снять выделение
+    if (event.ctrlKey) {
+        if (row.classList.contains('selected')) {
+            row.classList.remove('selected');
+
+            if (!$("#select-process-btn").hasClass('disabled')) {
+                $("#select-process-btn").addClass('disabled');
+            }
+        }
+    }
+    else {
+        var all_table_rows = table_body.childNodes;
+        all_table_rows.forEach(function (current_table_row) {
+            if (!!current_table_row.classList && current_table_row.classList.contains('selected') && current_table_row != row) {
+                current_table_row.classList.remove('selected');
+            }
+        });
+
+        if (!row.classList.contains('selected')) {
+            row.classList.add('selected');
+        }
+
+        if ($("#select-process-btn").hasClass('disabled')) {
+            $("#select-process-btn").removeClass('disabled');
+        }
+
+        console.log("Выбрали строку с кредитом: " + row.getAttribute('value'));
+    }
+} 
+
+function select_process_btn_clicked() {
+    console.log("Нажали на кнопку выбор процесса");
+
+    //устанавливаем путь для отправки запроса
+    var search_form = document.getElementById('active-app-form');
+    //search_form.action = './apply-loan';
+    //search_form.method = 'post';
+    
+    var active_app_table_body = document.getElementById('active-app-table-body');
+    var selected_row = active_app_table_body.querySelector('.selected');
+
+    //проверка на случай несанкционированного вмешательство в код элемента
+    if (!!selected_row) {
+
+        var selected_credit = selected_row.getAttribute('value');
+
+        location.href = './credit/' + String(selected_credit);
+        
+    }
+    else {
+        console.warn("Не выбрана строка в таблице! Отправка формы невозможна.");
+    }
 }
