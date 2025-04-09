@@ -1,0 +1,13 @@
+.photo-widget-container {
+    padding-right: 0 !important;
+}
+
+.loaded-photo {
+    z-index: 0;
+}
+
+.photo-widget-buttons {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+}

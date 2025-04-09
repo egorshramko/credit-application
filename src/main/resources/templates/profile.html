@@ -10,6 +10,7 @@
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <!--link href="/static/css/bs_table_rows_highlight.css" rel="stylesheet"-->
+        <link href="/static/css/photo_widget.css" rel="stylesheet">
 
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js"></script>
@@ -25,10 +26,10 @@
             <div class="container mt-3">
                 <form id="profile-form" th:object="${credit.profile}">
                     <div class="row">
-                        <div class="col-6 border rounded py-2 mb-2">
+                        <div class="col-8 border rounded py-2 mb-2">
                             <div class="row">
                                 <div class="col-12 px-2">
-                                    <h4>Персональная информация</h4>
+                                    <h4 class="d-flex justify-content-center">Персональная информация</h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -82,8 +83,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="photo-widget-container col-4 mb-2">
                             <!--Здесь будет виджет с фотографией-->
+                            <div class="container border rounded mr-0 py-2">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-center">Фотография</h4>
+                                </div>
+                                <div class="row mt-3">
+                                    <div id="photo-load-widget" class="loaded-photo container d-flex justify-content-center">
+                                        <img width="200" height="200" th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="rounded"/>
+                                    </div>
+                                    <div class="photo-widget-buttons">
+                                        <p class="d-flex justify-content-center">Тут будут кнопки(чуть позже)</p>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                     <div class="row">
