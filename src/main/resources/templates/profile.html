@@ -92,10 +92,13 @@
                                 <div class="row mt-3">
                                     <div class="photo-load-widget-container">
                                         <div id="photo-load-widget" class="loaded-photo-container container d-flex justify-content-center">
-                                            <img width="200" height="200" th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="loaded-photo rounded"/>
+                                            <img th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="loaded-photo rounded"/>
                                         </div>
                                         <div class="photo-widget-buttons">
-                                            <p class="d-flex justify-content-center m-0">Тут будут кнопки(чуть позже)</p>
+                                            
+                                                <button id="camera-photo-btn" type="button" class="btn btn-sm btn-secondary mx-2 photo-widget-btn">Камера</button>
+                                                <button id="file-photo-btn" type="button" class="btn btn-sm btn-secondary mx-2 photo-widget-btn">Файл</button>
+                                            
                                         </div>
                                     </div>
                                 </div>
