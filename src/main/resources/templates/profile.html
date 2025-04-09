@@ -90,11 +90,13 @@
                                     <h4 class="d-flex justify-content-center">Фотография</h4>
                                 </div>
                                 <div class="row mt-3">
-                                    <div id="photo-load-widget" class="loaded-photo container d-flex justify-content-center">
-                                        <img width="200" height="200" th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="rounded"/>
-                                    </div>
-                                    <div class="photo-widget-buttons">
-                                        <p class="d-flex justify-content-center">Тут будут кнопки(чуть позже)</p>
+                                    <div class="photo-load-widget-container">
+                                        <div id="photo-load-widget" class="loaded-photo-container container d-flex justify-content-center">
+                                            <img width="200" height="200" th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="loaded-photo rounded"/>
+                                        </div>
+                                        <div class="photo-widget-buttons">
+                                            <p class="d-flex justify-content-center m-0">Тут будут кнопки(чуть позже)</p>
+                                        </div>
                                     </div>
                                 </div>
 

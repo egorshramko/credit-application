@@ -2,12 +2,28 @@
     padding-right: 0 !important;
 }
 
-.loaded-photo {
-    z-index: 0;
+.photo-load-widget-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.loaded-photo-container {
+    position: relative;
+    z-index: 10;
+}
+
+.photo-load-widget-container .loaded-photo {
+    
 }
 
 .photo-widget-buttons {
-    z-index: 1;
+    width: 100%;
     display: flex;
     justify-content: center;
+    padding: inherit;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 11;
 }
