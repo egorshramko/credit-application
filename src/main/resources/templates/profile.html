@@ -9,6 +9,7 @@
         <title>Заполнение заявки - Кредитование ФЛ</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <!--link href="/static/css/bs_table_rows_highlight.css" rel="stylesheet"-->
         <link href="/static/css/photo_widget.css" rel="stylesheet">
 
@@ -16,6 +17,7 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js"></script>
     </head>
     <body>
+        
         <div class="container mt-3 mb-3">
             <a href="/">Вернуться на главную</a>
         </div>
@@ -90,13 +92,47 @@
                                     <h4 class="d-flex justify-content-center">Фотография</h4>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="photo-load-widget-container">
+                                    <div id="photo-load-widget-container" class="photo-load-widget-container">
                                         <div id="photo-load-widget" class="loaded-photo-container container d-flex justify-content-center">
-                                            <img th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="loaded-photo rounded"/>
+                                            <div class="clear-photo-btn-container">
+                                                <button id="clear-photo-btn" class="clear-photo-btn btn btn-danger photo-widget-control hide-photo-widget-control" type="button">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <img id="loaded-photo" th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="loaded-photo rounded"/>
                                         </div>
                                         <div class="photo-widget-buttons">
-                                            <button id="camera-photo-btn" type="button" class="btn btn-sm btn-secondary mx-2 photo-widget-btn">Камера</button>
-                                            <button id="file-photo-btn" type="button" class="btn btn-sm btn-secondary mx-2 photo-widget-btn">Файл</button>
+                                            <button id="camera-photo-btn" type="button" class="btn btn-sm btn-secondary mx-2 photo-widget-btn photo-widget-control hide-photo-widget-control"
+                                                data-bs-toggle="modal" data-bs-target="#camera-popup">Камера</button>
+                                            <button id="file-photo-btn" type="button" class="btn btn-sm btn-secondary mx-2 photo-widget-btn photo-widget-control hide-photo-widget-control">Файл</button>
+                                        </div>
+                                        <div class="modal fade" id="camera-popup" data-bs-backdrop="static" tabindex="-1" aria-labelledby="camera-popup-title" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Сделать фотографию с камеры</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="camera-area" class="camera">
+                                                            <canvas id="camera-canvas" class="camera-canvas"></canvas>
+                                                            <img id="no-camera-img" class="camera-not-available rounded" th:src="@{/static/assets/profile/no_camera.png}" alt="Камера не доступна">
+                                                            <div id="camera-input-container" class="camera-input-container d-none">
+                                                                <video id="camera-input" class="camera-stream">
+                                                                    Камера не доступна
+                                                                </video>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button id="take-photo-btn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Снять</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -161,6 +197,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script type="text/javascript" src="/static/js/profile.js"></script>
+        <script type="text/javascript" th:src="@{/static/js/widget.photo.camera.js}"></script>
 
     </body>
 </html>

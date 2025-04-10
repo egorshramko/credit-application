@@ -10,12 +10,26 @@
 
 .loaded-photo-container {
     position: relative;
+    width: 100%;
     z-index: 10;
+}
+
+.clear-photo-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    position: absolute;
+    padding: inherit;
+    z-index: 11;
+    right: 0;
 }
 
 .loaded-photo-container > .loaded-photo {
     max-width: 200px;
     max-height: 200px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
 }
 
 .photo-widget-buttons {
@@ -31,4 +45,39 @@
 
 .photo-widget-buttons > .photo-widget-btn {
     min-width: 65px;
+}
+
+.camera {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.camera > .camera-canvas {
+    display: none;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.camera > .camera-not-available {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.camera > .camera-input-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    justify-content: center;
+}
+
+.camera .camera-stream {
+    position: relative;
+    height: 100%;
+}
+
+.hide-photo-widget-control {
+    display: none;
 }
