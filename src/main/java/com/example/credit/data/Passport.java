@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -47,7 +48,7 @@ public class Passport {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "passport")
-    private List<PassportScan> scans;
+    private List<PassportScan> scans = new ArrayList<>();
 
     public void addScan(PassportScan scan) {
         scans.add(scan);
