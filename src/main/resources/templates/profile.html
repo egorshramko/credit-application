@@ -102,11 +102,12 @@
                                                 </button>
                                             </div>
                                             <img id="loaded-photo" th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="loaded-photo rounded"/>
+                                            <input id="file-photo-input" type="file" accept=".jpg, .png, .jpeg" class="d-none">
                                         </div>
                                         <div class="photo-widget-buttons">
-                                            <button id="camera-photo-btn" type="button" class="btn btn-sm btn-secondary mx-2 photo-widget-btn photo-widget-control hide-photo-widget-control"
+                                            <button id="camera-photo-btn" type="button" class="btn btn-sm btn-primary mx-2 photo-widget-btn photo-widget-control hide-photo-widget-control"
                                                 data-bs-toggle="modal" data-bs-target="#camera-popup">Камера</button>
-                                            <button id="file-photo-btn" type="button" class="btn btn-sm btn-secondary mx-2 photo-widget-btn photo-widget-control hide-photo-widget-control">Файл</button>
+                                            <button id="file-photo-btn" type="button" class="btn btn-sm btn-primary mx-2 photo-widget-btn photo-widget-control hide-photo-widget-control">Файл</button>
                                         </div>
                                         <div class="modal fade" id="camera-popup" data-bs-backdrop="static" tabindex="-1" aria-labelledby="camera-popup-title" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
@@ -196,8 +197,8 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="/static/js/profile.js"></script>
-        <script type="text/javascript" th:src="@{/static/js/widget.photo.camera.js}"></script>
+        <script type="text/javascript" th:src=@{/static/js/profile.js}></script>
+        <script type="module" th:src="@{/static/js/widget.photo.js}"></script>
 
     </body>
 </html>

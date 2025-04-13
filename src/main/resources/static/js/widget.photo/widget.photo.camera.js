@@ -1,13 +1,6 @@
-$("#camera-photo-btn").on('click', camera_photo_btn_handler);
-$("#camera-popup").on('hide.bs.modal', function () {
-    $(document.activeElement).blur();
-});
 
-$("#clear-photo-btn").on('click', clear_photo);
-$("#photo-load-widget-container").on('mouseover', show_widget_controls);
-$("#photo-load-widget-container").on('mouseout', hide_widget_controls);
 
-function camera_photo_btn_handler(event) {
+export function camera_photo_btn_handler(event) {
 
     //вычисляем ширину и высоту камеры
     let camera_area = $("#camera-area");
@@ -59,7 +52,7 @@ function camera_photo_btn_handler(event) {
     });
 }
 
-function take_picture() {
+export function take_picture() {
     let canvas = document.getElementById("camera-canvas");
     let video = document.getElementById('camera-input');
 
@@ -90,7 +83,7 @@ function take_picture() {
     }
 }
 
-function clear_photo() {
+export function clear_photo() {
     $("#clear-photo-btn").blur();
     console.log("Сработала очистка фото");
 
@@ -105,7 +98,7 @@ function clear_photo() {
     
 }
 
-function show_widget_controls() {
+export function show_widget_controls() {
     let photo_widget_container = document.getElementById('photo-load-widget-container');
     let controls = photo_widget_container.querySelectorAll('.photo-widget-control');
     controls.forEach((control) => {
@@ -122,7 +115,7 @@ function show_widget_controls() {
     });
 }
 
-function hide_widget_controls() {
+export function hide_widget_controls() {
     let photo_widget_container = document.getElementById('photo-load-widget-container');
     let controls = photo_widget_container.querySelectorAll('.photo-widget-control');
     controls.forEach((control) => {
