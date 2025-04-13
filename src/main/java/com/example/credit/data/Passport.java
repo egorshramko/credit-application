@@ -45,7 +45,8 @@ public class Passport {
     @Size(max=2000)
     private String issuePlace;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "passport")
     private List<PassportScan> scans;
 
 }
