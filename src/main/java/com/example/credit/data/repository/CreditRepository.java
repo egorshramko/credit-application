@@ -10,6 +10,7 @@ public interface CreditRepository extends CrudRepository<Credit, Long> {
 
     @Query("Select cr from Credit cr " +
             "left join cr.borrower cl " +
+            "left join cl.passport pas " + 
             "where " +
             "cr.stage != 'COMPLETED'" +
             "order by cr.createdDate asc")

@@ -45,8 +45,12 @@ public class Passport {
     @Size(max=2000)
     private String issuePlace;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "passport")
     private List<PassportScan> scans;
+
+    public void addScan(PassportScan scan) {
+        scans.add(scan);
+    }
 
 }

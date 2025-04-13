@@ -103,6 +103,9 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public Credit fillCreditProfile(Credit credit) {
 
+        // log.info("credit.borrower.passport: " + credit.getBorrower().getPassport().getId());
+        // log.info("credit.borrower.passport.scans.size(): " + credit.getBorrower().getPassport().getScans());
+
         Client borrower = credit.getBorrower();
         if (credit.getProfile() == null && borrower != null) {
 
