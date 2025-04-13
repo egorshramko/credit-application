@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -43,5 +44,8 @@ public class Passport {
 
     @Size(max=2000)
     private String issuePlace;
+
+    @OneToMany
+    private List<PassportScan> scans;
 
 }

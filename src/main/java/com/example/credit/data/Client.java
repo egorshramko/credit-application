@@ -61,6 +61,7 @@ public class Client {
     @JoinColumn(name = "client")
     private List<Contact> contacts;
 
-    //private File? photo;
+    @OneToOne
+    private BinaryContent photo;
 
 }

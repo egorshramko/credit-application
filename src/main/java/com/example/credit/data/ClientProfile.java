@@ -62,8 +62,6 @@ public class ClientProfile {
     @NotEmpty
     private Sex sex;
 
-    //private File? photo;
-
     @NotNull
     @NotEmpty
     private Boolean consentPersonalData;
@@ -73,5 +71,8 @@ public class ClientProfile {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "profile")
     private List<Contact> contacts;
+
+    @OneToOne
+    private BinaryContent photo;
 
 }
