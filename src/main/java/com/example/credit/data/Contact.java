@@ -17,25 +17,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Contact {
 
-    @Id
-    @SequenceGenerator(name = "contact_seq",
-            sequenceName = "contact_pkey_sequence",
-            initialValue = 1,
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_seq")
-    private Long id;
+	@Id
+	@SequenceGenerator(name = "contact_seq", sequenceName = "contact_pkey_sequence", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_seq")
+	private Long id;
 
-    private final LocalDateTime createdDate = LocalDateTime.now();
+	private final LocalDateTime createdDate = LocalDateTime.now();
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @NotEmpty
-    private ContactType contactType;
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@NotEmpty
+	private ContactType contactType;
 
-    @Pattern(regexp = "^+7\\d{10}$")
-    private String phoneNumber;
+	@Pattern(regexp = "^+7\\d{10}$")
+	private String phoneNumber;
 
-    private String comment;
+	private String comment;
 
 }

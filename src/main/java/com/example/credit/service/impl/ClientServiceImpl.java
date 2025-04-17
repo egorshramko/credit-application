@@ -19,71 +19,56 @@ import java.util.Optional;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    @Autowired
-    private ClientRepository clientRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 
-    @Autowired
-    private PassportRepository passportRepository;
+	@Autowired
+	private PassportRepository passportRepository;
 
-    @Override
-    public Iterable<Client> searchClients(ClientDto clientDto) {
+	@Override
+	public Iterable<Client> searchClients(ClientDto clientDto) {
 
-        LocalDate requestBirthdate;
-        try {
-            requestBirthdate = LocalDate.parse(clientDto.getBirthdate());
-        }
-        catch (DateTimeException err) {
-            requestBirthdate = null;
-        }
+		LocalDate requestBirthdate;
+		try {
+			requestBirthdate = LocalDate.parse(clientDto.getBirthdate());
+		} catch (DateTimeException err) {
+			requestBirthdate = null;
+		}
 
-        return clientRepository.getClientsBySearchFilter(
-                clientDto.getLastname(),
-                clientDto.getFirstname(),
-                clientDto.getMiddlename(),
-                requestBirthdate,
-                clientDto.getPassportSeries(),
-                clientDto.getPassportNumber());
+		return clientRepository.getClientsBySearchFilter(clientDto.getLastname(), clientDto.getFirstname(),
+				clientDto.getMiddlename(), requestBirthdate, clientDto.getPassportSeries(),
+				clientDto.getPassportNumber());
 
-    }
+	}
 
-    /**
-     * Метод создает нового клиента
-     * @param clientDto - пришедшие данные нового клиента
-     * @return - созданный объект клиента
-     */
-    @Override
-    public Client createClient(ClientDto clientDto) {
+	/**
+	 * Метод создает нового клиента
+	 * 
+	 * @param clientDto - пришедшие данные нового клиента
+	 * @return - созданный объект клиента
+	 */
+	@Override
+	public Client createClient(ClientDto clientDto) {
 
-        Passport clientPassport = passportRepository.save(
-                Passport.builder()
-                        .series(clientDto.getPassportSeries())
-                        .number(clientDto.getPassportNumber())
-                        .build()
-        );
+		Passport clientPassport = passportRepository.save(
+				Passport.builder().series(clientDto.getPassportSeries()).number(clientDto.getPassportNumber()).build());
 
-        LocalDate clientBirthdate;
-        try {
-            clientBirthdate = LocalDate.parse(clientDto.getBirthdate());
-        }
-        catch (DateTimeParseException err) {
-            log.warn("Empty client birthdate");
-            clientBirthdate = null;
-        }
+		LocalDate clientBirthdate;
+		try {
+			clientBirthdate = LocalDate.parse(clientDto.getBirthdate());
+		} catch (DateTimeParseException err) {
+			log.warn("Empty client birthdate");
+			clientBirthdate = null;
+		}
 
-        return clientRepository.save(
-                Client.builder()
-                        .lastname(clientDto.getLastname())
-                        .firstname(clientDto.getFirstname())
-                        .middlename(clientDto.getMiddlename())
-                        .birthdate(clientBirthdate)
-                        .passport(clientPassport)
-                        .build()
-        );
-    }
+		return clientRepository.save(Client.builder().lastname(clientDto.getLastname())
+				.firstname(clientDto.getFirstname()).middlename(clientDto.getMiddlename()).birthdate(clientBirthdate)
+				.passport(clientPassport).build());
+	}
 
-    @Override
-    public Optional<Client> findClientById(String id) {
-        return clientRepository.findById(Long.parseLong(id));
-    }
+	@Override
+	public Optional<Client> findClientById(String id) {
+		return clientRepository.findById(Long.parseLong(id));
+	}
 
 }

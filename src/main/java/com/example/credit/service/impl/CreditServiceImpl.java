@@ -19,116 +19,104 @@ import java.util.Optional;
 @Service
 public class CreditServiceImpl implements CreditService {
 
-    @Autowired
-    private ClientService clientService;
+	@Autowired
+	private ClientService clientService;
 
-    @Autowired
-    private CreditRepository creditRepository;
+	@Autowired
+	private CreditRepository creditRepository;
 
-    @Autowired
-    private ClientProfileRepository profileRepository;
+	@Autowired
+	private ClientProfileRepository profileRepository;
 
-    /**
-     * Метод создает объект кредита для нового клиента
-     * @param clientDto - транспортный объект из запроса с данными нового клиента
-     * @return - созданный объект кредита
-     */
-    @Override
-    public Credit createCreditForNewClient(ClientDto clientDto) {
+	/**
+	 * Метод создает объект кредита для нового клиента
+	 * 
+	 * @param clientDto - транспортный объект из запроса с данными нового клиента
+	 * @return - созданный объект кредита
+	 */
+	@Override
+	public Credit createCreditForNewClient(ClientDto clientDto) {
 
-        //создаем нового клиента по пришедшим данным
-        Client borrower = clientService.createClient(clientDto);
+		// создаем нового клиента по пришедшим данным
+		Client borrower = clientService.createClient(clientDto);
 
-        //создаем объект кредита
-        Credit createdCredit = creditRepository.save(
-                Credit.builder()
-                        .borrower(borrower)
-                        .stage(CreditStage.CREDIT_FORM)
-                        .build()
-        );
+		// создаем объект кредита
+		Credit createdCredit = creditRepository
+				.save(Credit.builder().borrower(borrower).stage(CreditStage.CREDIT_FORM).build());
 
-        //создаем анкету с данными клиента
-        this.fillCreditProfile(createdCredit);
+		// создаем анкету с данными клиента
+		this.fillCreditProfile(createdCredit);
 
-        log.info("Created credit with id: " + createdCredit.getId());
+		log.info("Created credit with id: " + createdCredit.getId());
 
-        return createdCredit;
-    }
+		return createdCredit;
+	}
 
-    @Override
-    public Credit createCreditForExistClient(String clientId) throws RuntimeException {
+	@Override
+	public Credit createCreditForExistClient(String clientId) throws RuntimeException {
 
+		Optional<Client> borrowerContainer = clientService.findClientById(clientId);
+		if (borrowerContainer.isPresent()) {
+			Client borrower = borrowerContainer.get();
 
-        Optional<Client> borrowerContainer = clientService.findClientById(clientId);
-        if (borrowerContainer.isPresent()) {
-            Client borrower = borrowerContainer.get();
+			Credit createdCredit = creditRepository
+					.save(Credit.builder().borrower(borrower).stage(CreditStage.CREDIT_FORM).build());
 
-            Credit createdCredit = creditRepository.save(
-                    Credit.builder()
-                            .borrower(borrower)
-                            .stage(CreditStage.CREDIT_FORM)
-                            .build()
-            );
+			// создаем анкету с данными клиента
+			this.fillCreditProfile(createdCredit);
 
-            //создаем анкету с данными клиента
-            this.fillCreditProfile(createdCredit);
+			log.info("Created credit with id: " + createdCredit.getId());
 
-            log.info("Created credit with id: " + createdCredit.getId());
+			return createdCredit;
+		} else {
+			throw new RuntimeException("Desired client not found");
+		}
 
-            return createdCredit;
-        }
-        else {
-            throw new RuntimeException("Desired client not found");
-        }
+	}
 
-    }
+	@Override
+	public Credit getCreditById(String creditId) {
 
-    @Override
-    public Credit getCreditById(String creditId) {
+		Optional<Credit> desiredCreditOrNull = creditRepository.findById(Long.parseLong(creditId));
 
-        Optional<Credit> desiredCreditOrNull = creditRepository.findById(Long.parseLong(creditId));
+		// fillCreditProfile вызывается для дополнительной проверки наличия анкеты у
+		// кредита
+		return desiredCreditOrNull.map(this::fillCreditProfile).orElse(null);
 
-        //fillCreditProfile вызывается для дополнительной проверки наличия анкеты у кредита
-        return desiredCreditOrNull.map(this::fillCreditProfile).orElse(null);
+	}
 
-    }
+	@Override
+	public Iterable<Credit> getActiveCredits() {
 
-    @Override
-    public Iterable<Credit> getActiveCredits() {
+		return creditRepository.getActiveCredits();
 
-        return creditRepository.getActiveCredits();
+	}
 
-    }
+	@Override
+	public Credit fillCreditProfile(Credit credit) {
 
-    @Override
-    public Credit fillCreditProfile(Credit credit) {
+		// log.info("credit.borrower.passport: " +
+		// credit.getBorrower().getPassport().getId());
+		// log.info("credit.borrower.passport.scans.size(): " +
+		// credit.getBorrower().getPassport().getScans());
 
-        // log.info("credit.borrower.passport: " + credit.getBorrower().getPassport().getId());
-        // log.info("credit.borrower.passport.scans.size(): " + credit.getBorrower().getPassport().getScans());
+		Client borrower = credit.getBorrower();
+		if (credit.getProfile() == null && borrower != null) {
 
-        Client borrower = credit.getBorrower();
-        if (credit.getProfile() == null && borrower != null) {
+			// создаем анкету с данными найденного клиента
+			ClientProfile profile = profileRepository.save(ClientProfile.builder().lastname(borrower.getLastname())
+					.firstname(borrower.getFirstname()).middlename(borrower.getMiddlename())
+					.birthdate(borrower.getBirthdate()).passport(borrower.getPassport())
+					.citizenship(borrower.getCitizenship()).sex(borrower.getSex()).tin(borrower.getTin())
+					// .contacts(borrower.getContacts())
+					.build());
 
-            //создаем анкету с данными найденного клиента
-            ClientProfile profile = profileRepository.save(ClientProfile.builder()
-                    .lastname(borrower.getLastname())
-                    .firstname(borrower.getFirstname())
-                    .middlename(borrower.getMiddlename())
-                    .birthdate(borrower.getBirthdate())
-                    .passport(borrower.getPassport())
-                    .citizenship(borrower.getCitizenship())
-                    .sex(borrower.getSex())
-                    .tin(borrower.getTin())
-                    //.contacts(borrower.getContacts())
-                    .build()
-            );
+			credit.setProfile(profile);
 
-            credit.setProfile(profile);
+			return creditRepository.save(credit);
+		}
 
-            return creditRepository.save(credit);
-        }
-
-        return credit;
-    }
+		return credit;
+	}
 
 }

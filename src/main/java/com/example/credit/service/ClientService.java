@@ -7,10 +7,10 @@ import java.util.Optional;
 
 public interface ClientService {
 
-    Iterable<Client> searchClients(ClientDto clientDto);
+	Iterable<Client> searchClients(ClientDto clientDto);
 
-    Client createClient(ClientDto clientDto);
+	Client createClient(ClientDto clientDto);
 
-    Optional<Client> findClientById(String id);
+	Optional<Client> findClientById(String id);
 
 }

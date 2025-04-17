@@ -12,25 +12,18 @@ import java.util.List;
 @Repository
 public interface ClientRepository extends CrudRepository<Client, Long> {
 
-    List<Client> getClientsByLastnameAndFirstname(String lastname, String firstname);
+	List<Client> getClientsByLastnameAndFirstname(String lastname, String firstname);
 
-    @Query("select cl from Client cl " +
-            "left join cl.passport pas " +
-            "where " +
-            "(:lastname is null or :lastname = '' or cl.lastname = :lastname) and " +
-            "(:firstname is null or :firstname = '' or cl.firstname = :firstname) and " +
-            "(:middlename is null or :middlename = '' or cl.middlename = :middlename) and " +
-            "(cast(cast(:birthdate as text) as date) is null or " +
-            "cast(cl.birthdate as date) = cast(cast(:birthdate as text) as date)) and " +
-            "(:passport_series is null or :passport_series = '' or pas.series = :passport_series) and " +
-            "(:passport_number is null or :passport_number = '' or pas.number = :passport_number)"
-    )
-    List<Client> getClientsBySearchFilter(
-            @Param("lastname") String lastname,
-            @Param("firstname") String firstname,
-            @Param("middlename") String middlename,
-            @Param("birthdate") LocalDate birthdate,
-            @Param("passport_series") String passportSeries,
-            @Param("passport_number") String passportNumber);
+	@Query("select cl from Client cl " + "left join cl.passport pas " + "where "
+			+ "(:lastname is null or :lastname = '' or cl.lastname = :lastname) and "
+			+ "(:firstname is null or :firstname = '' or cl.firstname = :firstname) and "
+			+ "(:middlename is null or :middlename = '' or cl.middlename = :middlename) and "
+			+ "(cast(cast(:birthdate as text) as date) is null or "
+			+ "cast(cl.birthdate as date) = cast(cast(:birthdate as text) as date)) and "
+			+ "(:passport_series is null or :passport_series = '' or pas.series = :passport_series) and "
+			+ "(:passport_number is null or :passport_number = '' or pas.number = :passport_number)")
+	List<Client> getClientsBySearchFilter(@Param("lastname") String lastname, @Param("firstname") String firstname,
+			@Param("middlename") String middlename, @Param("birthdate") LocalDate birthdate,
+			@Param("passport_series") String passportSeries, @Param("passport_number") String passportNumber);
 
 }

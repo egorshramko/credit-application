@@ -5,13 +5,14 @@ import com.example.credit.web.api.dto.ClientDto;
 
 public interface CreditService {
 
-    Credit createCreditForNewClient(ClientDto clientDto);
-    Credit createCreditForExistClient(String clientId);
+	Credit createCreditForNewClient(ClientDto clientDto);
 
-    Credit getCreditById(String creditId);
+	Credit createCreditForExistClient(String clientId);
 
-    Iterable<Credit> getActiveCredits();
+	Credit getCreditById(String creditId);
 
-    Credit fillCreditProfile(Credit credit);
+	Iterable<Credit> getActiveCredits();
+
+	Credit fillCreditProfile(Credit credit);
 
 }

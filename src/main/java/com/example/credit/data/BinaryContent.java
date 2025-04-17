@@ -19,22 +19,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BinaryContent {
-    
-    @Id
-    @SequenceGenerator(name = "binary_content_seq",
-        sequenceName = "binary_content_pkey_sequence",
-        initialValue = 1,
-        allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "binary_content_seq")
-    private Long id;
 
-    private final LocalDateTime createdDate = LocalDateTime.now();
+	@Id
+	@SequenceGenerator(name = "binary_content_seq", sequenceName = "binary_content_pkey_sequence", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "binary_content_seq")
+	private Long id;
 
-    @NotNull
-    @Size(max = 2000)
-    private String name;
+	private final LocalDateTime createdDate = LocalDateTime.now();
 
-    @NotNull
-    private File content;
+	@NotNull
+	@Size(max = 2000)
+	private String name;
+
+	@NotNull
+	private File content;
 
 }

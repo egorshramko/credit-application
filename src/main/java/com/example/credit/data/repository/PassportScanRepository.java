@@ -7,7 +7,5 @@ import com.example.credit.data.PassportScan;
 
 @Repository
 public interface PassportScanRepository extends CrudRepository<PassportScan, Long> {
-    
-    
 
 }

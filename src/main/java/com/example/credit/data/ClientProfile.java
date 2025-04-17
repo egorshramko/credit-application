@@ -19,60 +19,56 @@ import java.util.List;
 @Builder
 public class ClientProfile {
 
-    @Id
-    @SequenceGenerator(name = "client_profile_seq",
-            sequenceName = "client_profile_pkey_sequence",
-            initialValue = 1,
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_profile_seq")
-    private Long id;
+	@Id
+	@SequenceGenerator(name = "client_profile_seq", sequenceName = "client_profile_pkey_sequence", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_profile_seq")
+	private Long id;
 
-    private final LocalDateTime createdDate = LocalDateTime.now();
+	private final LocalDateTime createdDate = LocalDateTime.now();
 
-    @NotNull
-    @NotEmpty
-    @Size(max = 2000)
-    private String lastname;
+	@NotNull
+	@NotEmpty
+	@Size(max = 2000)
+	private String lastname;
 
-    @NotNull
-    @NotEmpty
-    @Size(max = 2000)
-    private String firstname;
+	@NotNull
+	@NotEmpty
+	@Size(max = 2000)
+	private String firstname;
 
-    @Size(max = 2000)
-    private String middlename;
+	@Size(max = 2000)
+	private String middlename;
 
-    @NotNull
-    private LocalDate birthdate;
+	@NotNull
+	private LocalDate birthdate;
 
-    @ManyToOne
-    private Passport passport;
+	@ManyToOne
+	private Passport passport;
 
-    @Pattern(regexp = "^\\d{12}$")
-    private String tin;
+	@Pattern(regexp = "^\\d{12}$")
+	private String tin;
 
-    @NotNull
-    @NotEmpty
-    @Size(max = 2000)
-    private String citizenship;
+	@NotNull
+	@NotEmpty
+	@Size(max = 2000)
+	private String citizenship;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @NotEmpty
-    private Sex sex;
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@NotEmpty
+	private Sex sex;
 
-    @NotNull
-    @NotEmpty
-    private Boolean consentPersonalData;
+	@NotNull
+	@NotEmpty
+	private Boolean consentPersonalData;
 
-    private String comment;
+	private String comment;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "profile")
-    private List<Contact> contacts;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "profile")
+	private List<Contact> contacts;
 
-    @OneToOne
-    private BinaryContent photo;
+	@OneToOne
+	private BinaryContent photo;
 
 }

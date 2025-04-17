@@ -21,47 +21,43 @@ import java.util.List;
 @Builder
 public class Client {
 
-    @Id
-    @SequenceGenerator(name = "client_seq",
-            sequenceName = "client_pkey_sequence",
-            initialValue = 1,
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
-    private Long id;
+	@Id
+	@SequenceGenerator(name = "client_seq", sequenceName = "client_pkey_sequence", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
+	private Long id;
 
-    private final LocalDateTime createdDate = LocalDateTime.now();
+	private final LocalDateTime createdDate = LocalDateTime.now();
 
-    @NotNull
-    @NotEmpty
-    @Size(max=2000)
-    private String lastname;
+	@NotNull
+	@NotEmpty
+	@Size(max = 2000)
+	private String lastname;
 
-    @NotNull
-    @NotEmpty
-    @Size(max=2000)
-    private String firstname;
-    private String middlename;
+	@NotNull
+	@NotEmpty
+	@Size(max = 2000)
+	private String firstname;
+	private String middlename;
 
-    private LocalDate birthdate;
+	private LocalDate birthdate;
 
-    @Pattern(regexp = "^\\d{12}$")
-    private String tin;
+	@Pattern(regexp = "^\\d{12}$")
+	private String tin;
 
-    @Size(max=2000)
-    private String citizenship;
+	@Size(max = 2000)
+	private String citizenship;
 
-    @Enumerated(EnumType.STRING)
-    private Sex sex;
+	@Enumerated(EnumType.STRING)
+	private Sex sex;
 
-    @OneToOne
-    private Passport passport;
+	@OneToOne
+	private Passport passport;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "client")
-    private List<Contact> contacts;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "client")
+	private List<Contact> contacts;
 
-    @OneToOne
-    private BinaryContent photo;
+	@OneToOne
+	private BinaryContent photo;
 
 }

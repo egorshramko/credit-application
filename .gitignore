@@ -33,3 +33,4 @@ build/
 .vscode/
 
 documentation/
+/.apt_generated_tests/

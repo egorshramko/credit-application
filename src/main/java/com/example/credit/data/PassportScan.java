@@ -19,22 +19,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PassportScan {
-    
-    @Id
-    @SequenceGenerator(name = "passport_scan_seq",
-        sequenceName = "passport_scan_pkey_sequence",
-        initialValue = 1,
-        allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "passport_scan_seq")
-    private Long id;
 
-    private final LocalDateTime createdDate = LocalDateTime.now();
+	@Id
+	@SequenceGenerator(name = "passport_scan_seq", sequenceName = "passport_scan_pkey_sequence", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "passport_scan_seq")
+	private Long id;
 
-    @OneToOne
-    private BinaryContent scanFile;
+	private final LocalDateTime createdDate = LocalDateTime.now();
 
-    @ManyToOne
-    @JoinColumn(name = "passport")
-    private Passport passport;
+	@OneToOne
+	private BinaryContent scanFile;
+
+	@ManyToOne
+	@JoinColumn(name = "passport")
+	private Passport passport;
 
 }

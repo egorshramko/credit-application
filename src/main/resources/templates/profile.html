@@ -13,6 +13,7 @@
         <!--link href="/static/css/bs_table_rows_highlight.css" rel="stylesheet"-->
         <link href="/static/css/photo_widget.css" rel="stylesheet">
         <link href="/static/css/passport_scans.css" rel="stylesheet">
+        <link th:href="@{/static/css/common.css}" rel="stylesheet">
 
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js"></script>
@@ -120,9 +121,7 @@
                                                             <canvas id="camera-canvas" class="camera-canvas"></canvas>
                                                             <img id="no-camera-img" class="camera-not-available rounded" th:src="@{/static/assets/profile/no_camera.png}" alt="Камера не доступна">
                                                             <div id="camera-input-container" class="camera-input-container d-none">
-                                                                <video id="camera-input" class="camera-stream">
-                                                                    Камера не доступна
-                                                                </video>
+                                                                <video id="camera-input" class="camera-stream"></video>
                                                             </div>
                                                             
                                                         </div>
@@ -203,6 +202,7 @@
                                                 class="col-12 form-control d-flex justify-content-between scan-element"
                                             >
 
+                                                <input th:id="${'scan-control-' + scan.id}" th:files="${scan.scanFile.content}" class="d-none" />
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <span class="p-0" th:text="${scan.scanFile.name}">File name</span>
                                                 </div>
@@ -219,9 +219,42 @@
                                             
                                         </div>
                                         <div id="add-scan-container" class="add-scan-container">
-                                            <button type="button" id="add-scan-button" class="btn btn-link px-0 add-scan-button">Добавить файл</button>
+                                            <button type="button" id="add-scan-button" class="btn btn-link px-0 link-button">Добавить файл</button>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Блок способов связи-->
+                    <div class="row">
+                        <div class="col-12 border rounded mb-2 py-2">
+                            <!--Заголовок-->
+                            <div class="row">
+                                <h4 class="d-flex justify-content-center">Способ связи</h4>
+                            </div>
+
+                            <!--Блок настройки-->
+                            <div class="row">
+                                <div class="col-4">
+
+                                </div>
+                                <div class="col-4">
+									
+                                </div>
+                                <div class="col-4">
+                                    <label for="comment-connect-1" class="form-label">Комментарий</label>
+                                    <input class="form-control" type="text"
+                                           id="comment-connect-1" autocomplete="off"
+                                           name="comment"
+                                    />
+                                </div>
+                            </div>
+
+                            <!--Кнопка добавления способа связи-->
+                            <div class="col-12">
+                                <div id="add-contact-btn-container">
+                                    <button type="button" id="add-scan-button" class="btn btn-link px-0 link-button">Добавить способ связи</button>
                                 </div>
                             </div>
                         </div>

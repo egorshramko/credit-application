@@ -2,7 +2,3 @@
     padding: 6px 12px;
     /* border-color: #ced4da; */
 }
-
-.add-scan-container > .add-scan-button:focus {
-    box-shadow: none;
-}
