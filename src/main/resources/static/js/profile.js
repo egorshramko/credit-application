@@ -2,6 +2,7 @@ $("#passport-series-input").click().mask("99 99");
 $("#passport-number-input").click().mask("999999");
 $("#passport-department-code-input").click().mask("999-999");
 $("#tin-input").click().mask("999999999999");
+$(".phone-input").click().mask("+7 (999) 999-99-99");
 
 $("#lastname-input").on('input', lastname_input_handler);
 $("#firstname-input").on('input', firstname_input_handler);

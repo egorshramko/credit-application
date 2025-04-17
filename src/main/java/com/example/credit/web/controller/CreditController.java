@@ -1,6 +1,7 @@
 package com.example.credit.web.controller;
 
 import com.example.credit.data.Credit;
+import com.example.credit.data.enums.ContactType;
 import com.example.credit.data.enums.CreditStage;
 import com.example.credit.data.enums.Sex;
 import com.example.credit.service.CreditService;
@@ -27,6 +28,13 @@ public class CreditController {
 
 		return Sex.values();
 
+	}
+	
+	@ModelAttribute("contactTypes")
+	public ContactType[] addContactTypesToModel(Model model) {
+		
+		return ContactType.values();
+		
 	}
 
 	@GetMapping
