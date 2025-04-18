@@ -6,6 +6,10 @@ import com.example.credit.data.enums.CreditStage;
 import com.example.credit.data.enums.Sex;
 import com.example.credit.service.CreditService;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -34,6 +38,18 @@ public class CreditController {
 	public ContactType[] addContactTypesToModel(Model model) {
 		
 		return ContactType.values();
+		
+	}
+	
+	@ModelAttribute("displayValues")
+	public Iterable<String> addContactTypesDisplayValuesToModel(Model model) {
+		
+		List<String> displayValues = new ArrayList<>();
+		for (ContactType ct : ContactType.values()) {
+			displayValues.add(ct.getDisplayValue());
+		}
+		
+		return displayValues;
 		
 	}
 

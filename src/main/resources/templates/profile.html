@@ -14,6 +14,7 @@
         <link href="/static/css/photo_widget.css" rel="stylesheet">
         <link href="/static/css/passport_scans.css" rel="stylesheet">
         <link th:href="@{/static/css/common.css}" rel="stylesheet">
+        <link th:href="@{/static/css/widget.contacts.repeater.css}" rel="stylesheet">
 
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js"></script>
@@ -233,35 +234,49 @@
                             <div class="row">
                                 <h4 class="d-flex justify-content-center">Способ связи</h4>
                             </div>
+                            <div id="contacts-repeater" class="row">
+                            
+                            </div>
 
                             <!--Блок настройки-->
-                            <div class="row">
-                                <div class="col-4">
-                                	<label for="contact-type-input-1" class="form-label">Статус способа связи</label>
-									<select class="form-select" id="contact-type-input-1">
-                                        <option th:each="ct : ${contactTypes}" th:text="${ct.displayValue}" th:value="${ct}"></option>
-                                    </select>
-                                </div>
-                                <div class="col-4">
-                                	<label for="contact-value-1" class="form-label">Значение</label>
-									<input class="form-control phone-input" type="text"
-                                           id="contact-value-1" placeholder="+7 (___) ___-__-__" autocomplete="off"
-                                           name="passportNumber"
-                                    />
-                                </div>
-                                <div class="col-4">
-                                    <label for="comment-connect-1" class="form-label">Комментарий</label>
-                                    <input class="form-control" type="text"
-                                           id="comment-connect-1" autocomplete="off"
-                                           name="comment"
-                                    />
-                                </div>
-                            </div>
+                            <!--div class="row my-2">
+                            	<div class="col-11">
+                            		<div class="row">
+                            			<div class="col-4">
+		                                	<label for="contact-type-input-1" class="form-label">Статус способа связи</label>
+											<select class="form-select" id="contact-type-input-1">
+		                                        <option th:each="ct : ${contactTypes}" th:text="${ct.displayValue}" th:value="${ct}"></option>
+		                                    </select>
+		                                </div>
+		                                <div class="col-4">
+		                                	<label for="contact-value-1" class="form-label">Значение</label>
+											<input class="form-control phone-input" type="text"
+		                                           id="contact-value-1" placeholder="+7 (___) ___-__-__" autocomplete="off"
+		                                           name="passportNumber"
+		                                    />
+		                                </div>
+		                                <div class="col-4">
+		                                    <label for="comment-connect-1" class="form-label">Комментарий</label>
+		                                    <input class="form-control" type="text"
+		                                           id="comment-connect-1" autocomplete="off"
+		                                           name="comment"
+		                                    />
+		                                </div>
+                            		</div>
+                            		
+                            	</div>
+                            	<div class="col-1 d-flex align-items-end justify-content-center py-1">
+                            		<button type="button" class="btn btn-sm btn-outline-danger">
+                                        <span class="bi bi-trash3"></span>
+                                    </button>
+                            	</div>
+                                
+                            </div-->
 
                             <!--Кнопка добавления способа связи-->
                             <div class="col-12">
                                 <div id="add-contact-btn-container">
-                                    <button type="button" id="add-scan-button" class="btn btn-link px-0 link-button">Добавить способ связи</button>
+                                    <button type="button" id="add-contact-button" class="btn btn-link px-0 link-button">Добавить способ связи</button>
                                 </div>
                             </div>
                         </div>
@@ -291,6 +306,11 @@
         <script type="text/javascript" th:src=@{/static/js/profile.js}></script>
         <script type="module" th:src="@{/static/js/widget.photo.js}"></script>
         <script type="module" th:src="@{/static/js/widget.collection.files/widget.collection.files.js}"></script>
+        <script th:inline="javascript">
+        	var contactTypesDisplay = [[${displayValues}]];
+        	var contactTypes = [[${contactTypes}]];
+        </script>
+        <script type="module" th:src="@{/static/js/widget.contacts.repeater/widget.contacts.repeater.js}"></script>
 
     </body>
 </html>
