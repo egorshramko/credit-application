@@ -60,16 +60,13 @@ function addContact() {
 	//подбор подходящего айдишника для элемента контакта
 	let contactContainerNumber = contactsRepeater.childNodes.length;
 	let contactContainerId = 'contact-' + String(contactContainerNumber);
-	do {
-		if (!!document.getElementById(contactContainerId)) {
-			contactContainerNumber++;
-			contactContainertId = 'contact-' + String(contactContainerNumber);
-		}
-		else {
-			contactContainer.setAttribute('id', contactContainerId);
-		}
+	
+	//подбираем необходимый айдишник для контейнера контакта
+	while (!!document.getElementById(contactContainerId)) {
+		contactContainerNumber++;
+		contactContainerId = 'contact-' + String(contactContainerNumber);
 	}
-	while (contactContainerId !== 'contact-' + String(contactContainerNumber));
+	contactContainer.setAttribute('id', contactContainerId);
 	
 	//контейнер заполнения информации
 	let contactInformationContainer = document.createElement('div');
@@ -208,7 +205,9 @@ function removeContactButtonHandler(event) {
 	
 	let removeButton = (event.target.tagName == 'SPAN') ? event.target.parentNode : event.target;
 	
-	console.log(removeButton);
+	let contactId = removeButton.getAttribute('id').replace('contact-remove-', '');
 	
+	let contactContainer = document.getElementById('contact-' + String(contactId));
+	contactContainer.remove();
 	
 }
