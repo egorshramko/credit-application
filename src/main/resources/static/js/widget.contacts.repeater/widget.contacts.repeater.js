@@ -8,50 +8,6 @@ function addContact() {
 	//получаем контейнер повторителя
 	let contactsRepeater = document.getElementById('contacts-repeater');
 	
-								/*	<div class="row my-2">
-			                            <div class="col-11">
-			                            	<div class="row">
-			                            		<div class="col-4">
-					                                <label for="contact-type-input-1" class="form-label">Статус способа связи</label>
-													<select class="form-select" id="contact-type-input-1">
-					                                    <option th:each="ct : ${contactTypes}" th:text="${ct.displayValue}" th:value="${ct}"></option>
-					                                </select>
-					                            </div>
-					                            <div class="col-4">
-					                                <label for="contact-value-1" class="form-label">Значение</label>
-													<input class="form-control phone-input" type="text"
-					                                           id="contact-value-1" placeholder="+7 (___) ___-__-__" autocomplete="off"
-					                                           name="passportNumber"
-					                                    />
-					                                </div>
-					                                <div class="col-4">
-					                                    <label for="comment-connect-1" class="form-label">Комментарий</label>
-					                                    <input class="form-control" type="text"
-					                                           id="comment-connect-1" autocomplete="off"
-					                                           name="comment"
-					                                    />
-					                                </div>
-			                            		</div>
-			                            		
-			                            	</div>
-			                            	<div class="col-1 d-flex align-items-end justify-content-center py-1">
-			                            		<button type="button" class="btn btn-sm btn-outline-danger">
-			                                        <span class="bi bi-trash3"></span>
-			                                    </button>
-			                            	</div>
-			                                
-			                            </div>
-		
-			                            <!--Кнопка добавления способа связи-->
-			                            <div class="col-12">
-			                                <div id="add-contact-btn-container">
-			                                    <button type="button" id="add-contact-button" class="btn btn-link px-0 link-button">Добавить способ связи</button>
-			                                </div>
-			                            </div>
-			                        </div>*/
-								
-	console.log(contactTypes);
-	
 	//контейнер контакта
 	let contactContainer = document.createElement('div');
 	contactContainer.classList.add('row');
@@ -91,6 +47,7 @@ function addContact() {
 	
 	//подбор подходящего айдишника для выпадающего списка
 	let contactTypeSelectId = 'contact-type-input-' + String(contactContainerNumber);
+	contactTypeSelect.setAttribute('id', contactTypeSelectId);
 	
 	//задаем привязку надписи к выпадающему списку
 	contactTypeSelectLabel.setAttribute('for', contactTypeSelectId);
@@ -194,8 +151,6 @@ function addContact() {
 	contactContainer.appendChild(contactRemoveButtonContainer);
 	
 	contactsRepeater.appendChild(contactContainer);
-								
-	
 	
 }
 

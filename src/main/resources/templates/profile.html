@@ -235,7 +235,36 @@
                                 <h4 class="d-flex justify-content-center">Способ связи</h4>
                             </div>
                             <div id="contacts-repeater" class="row">
-                            
+                            	<!-- Подгрузка уже существующих контактов из БД -->
+                            	<div th:each="ct, ctIndex : *{contacts}" th:id="${'contact-' + ctIndex}" class="row my-2">
+                            		<div class="col-11">
+                            			<div class="row">
+                            				<div class="col-4">
+                            					<label th:for="${'contact-type-input' + ctIndex}" class="form-label">Статус способа связи</label>
+                            					<select th:id="${'contact-type-input' + ctIndex}" class="form-select">
+                            						<option th:each="ctType : ${contactTypes}" th:value="${ctType}" th:attr="selected=${ctType == ct}">
+                            					</select>
+                            				</div>
+                            				<div class="col-4">
+                            					<label th:for="${'contact-value-' + ctIndex}" class="form-label">Значение</label>
+                            					<input th:id="${'contact-value-' + ctIndex}" class="form-control phone-input"
+                            						type="text" placeholder="+7 (___) ___-__-__" autocomplete="off"
+                            					/>
+                            				</div>
+                            				<div class="col-4">
+                            					<label th:for="${'contract-comment-' + ctIndex}" class="form-label">Комментарий</label>
+                            					<input th:id="${'contact-comment-' + ctIndex}" class="form-control" type="text" autocomplete="off">
+                            				</div>
+                            			</div>
+                            		</div>
+                            		<div class="col-1 d-flex align-items-end justify-content-center py-1">
+                            			<button th:id="${'contact-remove-' + ctIndex}" class="btn btn-sm btn-outline-danger link-button"
+                            				type="button">
+                            				
+                            				<span class="bi bi-trash3"></span>	
+                            			</button>
+                            		</div>
+                            	</div>
                             </div>
                             
                             <!--Кнопка добавления способа связи-->
