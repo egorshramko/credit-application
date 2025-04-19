@@ -30,8 +30,4 @@ public class PassportScan {
 	@OneToOne
 	private BinaryContent scanFile;
 
-	@ManyToOne
-	@JoinColumn(name = "passport")
-	private Passport passport;
-
 }

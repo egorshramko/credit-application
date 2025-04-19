@@ -22,8 +22,11 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
 			+ "cast(cl.birthdate as date) = cast(cast(:birthdate as text) as date)) and "
 			+ "(:passport_series is null or :passport_series = '' or pas.series = :passport_series) and "
 			+ "(:passport_number is null or :passport_number = '' or pas.number = :passport_number)")
-	List<Client> getClientsBySearchFilter(@Param("lastname") String lastname, @Param("firstname") String firstname,
-			@Param("middlename") String middlename, @Param("birthdate") LocalDate birthdate,
-			@Param("passport_series") String passportSeries, @Param("passport_number") String passportNumber);
+	List<Client> getClientsBySearchFilter(@Param("lastname") String lastname, 
+										  @Param("firstname") String firstname,
+										  @Param("middlename") String middlename, 
+										  @Param("birthdate") LocalDate birthdate,
+										  @Param("passport_series") String passportSeries, 
+										  @Param("passport_number") String passportNumber);
 
 }

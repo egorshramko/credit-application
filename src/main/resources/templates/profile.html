@@ -187,6 +187,7 @@
                                     />
                                 </div>
                             </div>
+                            <!-- Коллекция сканов паспорта -->
                             <div class="row mt-3">
                                 <div class="col-12">
                                     <label for="passport-scans-container" class="form-label">Сканы</label>
@@ -242,7 +243,7 @@
                             				<div class="col-4">
                             					<label th:for="${'contact-type-input' + ctIndex}" class="form-label">Статус способа связи</label>
                             					<select th:id="${'contact-type-input' + ctIndex}" class="form-select">
-                            						<option th:each="ctType : ${contactTypes}" th:value="${ctType}" th:attr="selected=${ctType == ct}">
+                            						<option th:each="ctType : ${contactTypes}" th:value="${ctType}" th:attr="selected=${ctType == ct.contactType}">
                             					</select>
                             				</div>
                             				<div class="col-4">
@@ -252,7 +253,7 @@
                             					/>
                             				</div>
                             				<div class="col-4">
-                            					<label th:for="${'contract-comment-' + ctIndex}" class="form-label">Комментарий</label>
+                            					<label th:for="${'contract-comment-' + cIndex}" class="form-label">Комментарий</label>
                             					<input th:id="${'contact-comment-' + ctIndex}" class="form-control" type="text" autocomplete="off">
                             				</div>
                             			</div>
@@ -301,8 +302,13 @@
         <script type="module" th:src="@{/static/js/widget.photo.js}"></script>
         <script type="module" th:src="@{/static/js/widget.collection.files/widget.collection.files.js}"></script>
         <script th:inline="javascript">
-        	var contactTypesDisplay = [[${displayValues}]];
-        	var contactTypes = [[${contactTypes}]];
+        	/*<![CDATA[*/
+        	
+        	var contactTypesDisplay = /*[[${displayValues}]]*/ {};
+        	var contactTypes = /*[[${contactTypes}]]*/ {};
+        	
+        	
+        	/*]]>*/
         </script>
         <script type="module" th:src="@{/static/js/widget.contacts.repeater/widget.contacts.repeater.js}"></script>
 

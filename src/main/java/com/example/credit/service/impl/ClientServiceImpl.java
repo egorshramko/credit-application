@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -34,10 +36,34 @@ public class ClientServiceImpl implements ClientService {
 		} catch (DateTimeException err) {
 			requestBirthdate = null;
 		}
-
-		return clientRepository.getClientsBySearchFilter(clientDto.getLastname(), clientDto.getFirstname(),
+		
+		log.info("middlename: " + clientDto.getMiddlename());
+		
+		List<Client> searchedClients = clientRepository.getClientsBySearchFilter(clientDto.getLastname(), clientDto.getFirstname(),
 				clientDto.getMiddlename(), requestBirthdate, clientDto.getPassportSeries(),
 				clientDto.getPassportNumber());
+
+		log.info("founded clients: " + searchedClients.size());
+		
+		//маппинг необходимых значений для возврата ответа
+		List<Client> returnedClientsInfo = new ArrayList<>();
+		
+		for (Client client : searchedClients) {
+			returnedClientsInfo.add(Client.builder()
+										.id(client.getId())
+										.lastname(client.getLastname())
+										.firstname(client.getFirstname())
+										.middlename(client.getMiddlename())
+										.passport(Passport.builder()
+													.series(client.getPassport().getSeries())
+													.number(client.getPassport().getNumber())
+													.build()
+												)
+										.build()
+									);
+		}
+		
+		return returnedClientsInfo;
 
 	}
 
