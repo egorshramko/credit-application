@@ -6,29 +6,31 @@ export function addFileBtnHandler() {
     scansControl.click();
 }
 
+/**
+ * Функция запускается по событию выбора файла
+ */
 export function selectFileHandler(event) {
 	
-	console.log(event.target);
-	let files = event.target.files;
+	console.log("Выбрали файл");
 	
-	if (!!files && files.length > 0) {
-		
-		//подгружаем последний загруженный файл
-		let reader = new FileReader();
-		reader.readAsDataURL(files[0]);
-		
-		reader.onload = () => {
-			let file = reader.result;
-			showAddedScan(file);
+	let scansControl = event.target;
+	let lastUploadedFile = scansControl.files[0];
+	console.log(lastUploadedFile);
+	
+	let data = new FormData();
+	data.append("file", lastUploadedFile);
+	
+	$.ajax({
+		url: '/storage/upload',
+		data: data,
+		cache: false, 
+		contentType: false, 
+		processData: false, 
+		method: 'POST',
+		success: (data) => {
+			console.log(data);
 		}
-		
-		reader.onerror = () => {
-			console.error(reader.error);
-		}
-		
-	}
-	
-	
+	});
 	
 }
 
