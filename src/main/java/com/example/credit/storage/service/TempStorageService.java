@@ -1,5 +1,6 @@
 package com.example.credit.storage.service;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -8,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface TempStorageService {
 	
 	//внешняя загрузка файла в хранилище (с клиента)
-	UUID upload(MultipartFile media);
+	UUID upload(MultipartFile media) throws IOException;
 	
 	//добавление файла в хранилище
 	UUID add(UUID fileUUID, Path file);

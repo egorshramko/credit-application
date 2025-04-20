@@ -5,7 +5,8 @@ import java.nio.file.Path;
 
 public interface TempStorage {
 	
-	UUID add(UUID fileUUID, Path file);
-	Path remove(UUID fileUUID);
+	UUID add(UUID fileUUID, StorageFileWrapper file);
+	StorageFileWrapper remove(UUID fileUUID);
+	StorageFileWrapper get(UUID fileUUID);
 	
 }

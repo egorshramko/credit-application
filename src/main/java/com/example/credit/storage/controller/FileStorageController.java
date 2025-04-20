@@ -28,8 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/storage")
 public class FileStorageController {
 	
-	@Value("${storage.upload.path}")
-	private Path uploadPath;
 	
 	@Autowired
 	private TempStorageService storageService;
