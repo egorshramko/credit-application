@@ -60,9 +60,14 @@ public class TempStorageServiceImpl implements TempStorageService {
 	}
 	
 	@Override
-	public UUID add(UUID fileUUID, Path file) {
+	public Path download(UUID fileUUID) throws IOException {
 		
-		StorageFileWrapper fileWrapper = new StorageFileWrapper(file, file.getFileName().toString());
+		return tempStorage.get(fileUUID).getFilePath();
+		
+	}
+	
+	@Override
+	public UUID add(UUID fileUUID, Path file) {
 		
 		return tempStorage.add(
 				fileUUID, 
@@ -74,8 +79,8 @@ public class TempStorageServiceImpl implements TempStorageService {
 	}
 	
 	@Override
-	public Path remove(UUID fileUUID) {
-		return tempStorage.remove(fileUUID).getFilePath();
+	public boolean remove(UUID fileUUID) throws IOException {
+		return tempStorage.remove(fileUUID);
 	}
 	
 	private String getOriginalFileExtension(MultipartFile media) {
@@ -91,6 +96,20 @@ public class TempStorageServiceImpl implements TempStorageService {
 			else {
 				return "";
 			}
+		
+	}
+	
+	@Override
+	public String getFileNameById(UUID fileUUID) {
+		
+		try {
+			return tempStorage.get(fileUUID).getOriginalName();
+		}
+		catch (IOException err) {
+			err.printStackTrace();
+		}
+		
+		return "";
 		
 	}
 	

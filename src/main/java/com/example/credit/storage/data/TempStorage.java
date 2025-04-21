@@ -1,12 +1,13 @@
 package com.example.credit.storage.data;
 
 import java.util.UUID;
-import java.nio.file.Path;
+
+import java.io.IOException;
 
 public interface TempStorage {
 	
 	UUID add(UUID fileUUID, StorageFileWrapper file);
-	StorageFileWrapper remove(UUID fileUUID);
-	StorageFileWrapper get(UUID fileUUID);
+	boolean remove(UUID fileUUID) throws IOException;
+	StorageFileWrapper get(UUID fileUUID) throws IOException;
 	
 }

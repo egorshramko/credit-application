@@ -11,10 +11,17 @@ public interface TempStorageService {
 	//внешняя загрузка файла в хранилище (с клиента)
 	UUID upload(MultipartFile media) throws IOException;
 	
+	//метод на скачивание файла из хранилища
+	Path download(UUID fileUUID) throws IOException;
+	
 	//добавление файла в хранилище
 	UUID add(UUID fileUUID, Path file);
 	
 	//удаление файла из хранилища
-	Path remove(UUID fileUUID);
+	boolean remove(UUID fileUUID) throws IOException;
+	
+	//получить название файла по ID
+	String getFileNameById(UUID fileUUID);
+	
 	
 }

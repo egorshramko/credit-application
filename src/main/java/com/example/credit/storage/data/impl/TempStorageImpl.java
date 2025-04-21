@@ -5,10 +5,12 @@ import com.example.credit.storage.data.StorageFileWrapper;
 
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.io.IOException;
 
 @Component
 public class TempStorageImpl implements TempStorage {
@@ -31,13 +33,29 @@ public class TempStorageImpl implements TempStorage {
 	}
 	
 	@Override
-	public StorageFileWrapper remove(UUID fileUUID) {
-		return tempStorageFiles.remove(fileUUID);
+	public boolean remove(UUID fileUUID) throws IOException {
+		
+		//получаем файл из хранилища
+		StorageFileWrapper removedFileInfo = tempStorageFiles.remove(fileUUID);
+		
+		if (removedFileInfo != null) {
+			Path file = removedFileInfo.getFilePath();
+			return Files.deleteIfExists(file);
+		}
+		
+		throw new IOException("Such file is not exists in temporary storage");
+		
 	}
 	
 	@Override
-	public StorageFileWrapper get(UUID fileUUID) {
-		return tempStorageFiles.get(fileUUID);
+	public StorageFileWrapper get(UUID fileUUID) throws IOException {
+		
+		if (tempStorageFiles.containsKey(fileUUID)) {
+			return tempStorageFiles.get(fileUUID);
+		}
+		
+		throw new IOException("Such file is not exists in temporary storage");
+		
 	}
 	
 }
