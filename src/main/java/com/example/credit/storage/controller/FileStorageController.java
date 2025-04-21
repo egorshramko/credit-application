@@ -40,7 +40,7 @@ public class FileStorageController {
 	public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) @Valid final MultipartFile media) {
 		
 		try {
-			return new ResponseEntity<>(storageService.upload(media), HttpStatus.OK);
+			return new ResponseEntity<>(storageService.upload(media), HttpStatus.CREATED);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
