@@ -59,7 +59,7 @@ function showAddedScan(scanFileUUID, fileName) {
 	let scansCollectionContainer = document.getElementById('scans-collection-container');
 	
 	let scanContainer = document.createElement('div');
-	scanContainer.classList.add('col-12', 'form-control', 'd-flex', 'justify-content-between', 'scan-element');
+	scanContainer.classList.add('col-12', 'form-control', 'd-flex', 'justify-content-between', 'scan-element', 'mb-2');
 	
 	let scansContainerNumber = scansCollectionContainer.childNodes.length;
 	let scanContainerId = 'scan-control-' + String(scansContainerNumber);

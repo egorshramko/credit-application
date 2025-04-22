@@ -21,7 +21,7 @@
     </head>
     <body>
         
-        <div class="container mt-3 mb-3">
+        <div class="container my-3">
             <a href="/">Вернуться на главную</a>
         </div>
         <div class="container border rounded">
@@ -298,13 +298,34 @@
                                 </div>
                             </div>
                             <div class="row">
-                            	
+                            	<div class="col-12 py-3">
+                            		<div class="form-check">
+	                            		<input id="consent-personal-data-input" class="form-check-input" 
+	                            			type="checkbox" value=""
+	                            		/>
+	                            		<label class="form-check-label" for="consent-personal-data-input">
+	                            			Согласие на обработку персональных данных
+	                            		</label>
+	                            	</div>
+                            	</div>
                             </div>
                         </div>
                     </div>
                 </form>
+                
             </div>
 
+        </div>
+        <div class="container my-3">
+            <div class="row">
+            	<div class="col-6 d-flex justify-content-start">
+            		<button class="btn btn-primary">Заполнить анкету</button>
+            	</div>
+            	<div class="col-6 d-flex justify-content-end">
+            		<button class="btn btn-danger">Отказаться от оформления</button>
+            	</div>
+            		
+            </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
