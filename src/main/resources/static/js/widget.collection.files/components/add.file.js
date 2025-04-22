@@ -93,7 +93,8 @@ function showAddedScan(scanFileUUID, fileName) {
 	
 	downloadButton.appendChild(downloadButtonSpan);
 	downloadButton.addEventListener('click', () => {
-		console.log("Кликнули на скачивание файла");
+		downloadButton.blur();
+		downloadScan(downloadButton.getAttribute('for'));
 	});
 	
 	let removeButton = document.createElement('button');
@@ -106,6 +107,7 @@ function showAddedScan(scanFileUUID, fileName) {
 	
 	removeButton.appendChild(removeButtonSpan);
 	removeButton.addEventListener('click', () => {
+		removeButton.blur();
 		removeScan(removeButton.getAttribute('for'));
 	});
 	
@@ -122,4 +124,75 @@ function showAddedScan(scanFileUUID, fileName) {
 function removeScan(controlId) {
 	console.log("Кликнули на удаление файла");
 	console.log("controlId: " + controlId);
+	
+	let scanControl = document.getElementById(controlId);
+	let storageUUID = scanControl.getAttribute('value');
+	
+	$.ajax({
+		url: '/storage/delete/' + storageUUID,
+		method: 'DELETE',
+		dataType: 'json',
+		success: (data) => {
+			if (data.removed) {
+				removeFileFromCollection(controlId);
+			}
+			else {
+				console.warn("server returns removed: false");
+			}
+			
+		},
+		error: (exception) => {
+			console.error(exception);
+		}
+	});
+}
+
+function removeFileFromCollection(controlId) {
+	let scanControl = document.getElementById(controlId);
+	if (!!scanControl) {
+		scanControl.remove();
+	}
+}
+
+function downloadFile(url, filename) {
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = filename;
+	a.style.display = 'none';
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+}
+
+async function downloadScan(controlId) {
+	console.log("Кликнули на скачивание файла");
+	console.log("controlId: " + controlId);
+	
+	let scanControl = document.getElementById(controlId);
+	let storageUUID = scanControl.getAttribute('value');
+	let filename;
+	
+	try {
+		const response = await fetch('/storage/download/' + storageUUID)
+				.then((response) => {
+					if (!response.ok) throw new Error("Download response was not ok");
+					filename = response.headers.get('Content-Disposition')
+						.replace('attachment; filename="', '')
+						.replace('"', '');
+						
+					console.log("filename: " + filename);
+					
+					return response.blob();
+				})
+				.then((blob) => {
+					const url = window.URL.createObjectURL(blob);
+					downloadFile(url, filename);
+					window.URL.revokeObjectURL(url);
+					
+				});
+	}
+	catch (error) {
+		console.error(error);
+	}
+	
 }
