@@ -8,6 +8,8 @@ $("#lastname-input").on('input', lastname_input_handler);
 $("#firstname-input").on('input', firstname_input_handler);
 $("#middlename-input").on('input', middlename_input_handler);
 
+$("#return-index-link").on('click', return_index_link_handler);
+
 //обработчик ввода фамилии
 function lastname_input_handler() {
 
@@ -54,4 +56,59 @@ function highlight_invalid_field(element, input_valid) {
             element.removeClass('is-invalid');
         }
     }
+}
+
+async function return_index_link_handler(event) {
+	
+	let link = event.target;
+	
+	console.log("Кликнули на возврат на главную");	
+	
+	//перед возвращением на главную страницу, необходимо 
+	//удалить все подгруженные файлы из временного хранилища (все сканы и фото)
+	let photo_load_widget = document.getElementById('photo-load-widget');
+	let avatar_uuid = photo_load_widget.getAttribute('value');
+	
+	let uuids = [];
+	if (photo_load_widget != null) {
+		uuids.push(avatar_uuid);
+	}
+	
+	let scans_collection_container = document.getElementById('scans-collection-container');
+ 	scans_collection_container.childNodes.forEach((node) => {
+		
+		try {
+			let node_uuid = node.getAttribute('value');
+			if (node_uuid != null) {
+				uuids.push(node_uuid);
+			} 
+		}
+		catch (err) {
+			console.log("Обработано исключение");
+		}
+		
+	});
+	
+	uuids.forEach((uuid) => {
+		
+		removeFilesByUuid(uuid);
+		
+	});
+	
+	window.location = link.href;
+}
+
+function removeFilesByUuid(uuid) {
+	$.ajax({
+		url: '/storage/delete/' + uuid,
+		method: 'DELETE',
+		success: (data) => {
+			if (data.removed) {
+				console.log('resource removed');
+			}
+			else {
+				console.log('resource not removed');
+			}
+		}
+	});
 }

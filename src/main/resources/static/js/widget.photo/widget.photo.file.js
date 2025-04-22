@@ -13,7 +13,24 @@ export function file_uploaded(event) {
 
     if (valid_file_type(last_uploaded_file)) {
         console.log("Тип файла корректен");
+		
+		let form_data = new FormData();
+		form_data.append("file", last_uploaded_file);
 
+		//загружаем файл на сервер
+		$.ajax({
+			url: '/storage/upload',
+			data: form_data,
+			cache: false, 
+			contentType: false, 
+			processData: false, 
+			method: 'POST',
+			success: (data) => {
+				let photoLoadWidget = document.getElementById('photo-load-widget');
+				photoLoadWidget.setAttribute('value', data);
+			}
+		});
+		
         let photo_preview = document.getElementById('loaded-photo');
         photo_preview.setAttribute('src', window.URL.createObjectURL(last_uploaded_file));
 

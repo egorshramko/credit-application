@@ -71,6 +71,10 @@ export function take_picture() {
         let photoUrl = canvas.toDataURL('/static/assets/camera/avatar.png');
         let loaded_photo = document.getElementById('loaded-photo');
         loaded_photo.setAttribute('src', photoUrl);
+		
+		//загружаем созданную фотографию на сервер
+		sendPhoto(photoUrl);
+		
 
         let photo_load_widget = document.getElementById('photo-load-widget');
         if (!photo_load_widget.classList.contains('photo-uploaded')) {
@@ -83,18 +87,56 @@ export function take_picture() {
     }
 }
 
+async function sendPhoto(url) {
+	let formData = new FormData();
+	let photoBlob = await fetch(url)
+		.then(response => response.blob());
+	formData.append("file", new File([photoBlob], 'avatar.png'));
+	$.ajax({
+		url: '/storage/upload',
+		data: formData, 
+		cache: false, 
+		contentType: false, 
+		processData: false, 
+		method: 'POST',
+		success: (data) => {
+			let photoLoadWidget = document.getElementById('photo-load-widget');
+			photoLoadWidget.setAttribute('value', data);
+		}
+	});
+}	
+
 export function clear_photo() {
     $("#clear-photo-btn").blur();
     console.log("Сработала очистка фото");
 
     let loaded_photo = document.getElementById('loaded-photo');
-    //loaded_photo.src = './static/assets/profile/empty_avatar.png';
+	
     loaded_photo.setAttribute('src', '/static/assets/profile/empty_avatar.png');
 
     let photo_load_widget = document.getElementById('photo-load-widget');
     if (photo_load_widget.classList.contains('photo-uploaded')) {
         photo_load_widget.classList.remove('photo-uploaded');
     }
+	
+	//удаляем фото с сервера
+	let photo_uuid = photo_load_widget.getAttribute('value');
+	$.ajax({
+		url: '/storage/delete/' + photo_uuid, 
+		method: 'DELETE',
+		dataType: 'json',
+		success: (data) => {
+			if (data.removed) {
+				photo_load_widget.removeAttribute('value');
+			}
+			else {
+				console.warn("server returns removed: false");
+			}
+		},
+		error: (exception) => {
+			console.error(exception);
+		}
+	});
     
 }
 

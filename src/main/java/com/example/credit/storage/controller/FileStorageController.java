@@ -52,6 +52,8 @@ public class FileStorageController {
 	@GetMapping(value = "/download/{fileUUID}")
 	public ResponseEntity<?> downloadFile(@PathVariable String fileUUID) {
 		
+		log.info("Attempt to download file: " + fileUUID);
+		
 		try {
 			Path filePath = storageService.download(UUID.fromString(fileUUID));
 			Resource fileResource = new FileSystemResource(
@@ -78,6 +80,9 @@ public class FileStorageController {
 	
 	@DeleteMapping(value = "/delete/{fileUUID}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteFile(@PathVariable String fileUUID) {
+		
+		log.info("Attempt to delete file with uuid " + fileUUID);
+		
 		try {
 			boolean removeResult = storageService.remove(UUID.fromString(fileUUID));
 			return ResponseEntity.ok()

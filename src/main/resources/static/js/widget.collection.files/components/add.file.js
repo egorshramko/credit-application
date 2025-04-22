@@ -34,27 +34,6 @@ export function selectFileHandler(event) {
 	
 }
 
-/*<div th:each="scan : *{passport.scans}" 
-    th:id="${'passport-scan-' + scan.id}" 
-    th:value="${scan.id}"
-    class="col-12 form-control d-flex justify-content-between scan-element"
->
-
-    <input th:id="${'scan-control-' + scan.id}" th:files="${scan.scanFile.content}" class="d-none" />
-    <div class="d-flex flex-column justify-content-center">
-        <span class="p-0" th:text="${scan.scanFile.name}">File name</span>
-    </div>
-    <div class="d-flex">
-        <button type="button" class="btn btn-sm btn-outline-secondary mx-1">
-            <span class="bi bi-download"></span>
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-danger">
-            <span class="bi bi-trash3"></span>
-        </button>
-    </div>
-
-</div>*/
-
 function showAddedScan(scanFileUUID, fileName) {
 	let scansCollectionContainer = document.getElementById('scans-collection-container');
 	
