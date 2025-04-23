@@ -60,6 +60,7 @@ function highlight_invalid_field(element, input_valid) {
 
 async function return_index_link_handler(event) {
 	
+	event.preventDefault();
 	let link = event.target;
 	
 	console.log("Кликнули на возврат на главную");	
@@ -70,45 +71,61 @@ async function return_index_link_handler(event) {
 	let avatar_uuid = photo_load_widget.getAttribute('value');
 	
 	let uuids = [];
-	if (photo_load_widget != null) {
+	if (avatar_uuid != null) {
 		uuids.push(avatar_uuid);
 	}
 	
 	let scans_collection_container = document.getElementById('scans-collection-container');
- 	scans_collection_container.childNodes.forEach((node) => {
-		
-		try {
-			let node_uuid = node.getAttribute('value');
-			if (node_uuid != null) {
-				uuids.push(node_uuid);
-			} 
+	let scan_controls = scans_collection_container.querySelectorAll('.scan-element');
+	
+	scan_controls.forEach((control) => {
+		let control_value = control.getAttribute('value');
+		if (!!control_value) {
+			uuids.push(control_value);
 		}
-		catch (err) {
-			console.log("Обработано исключение");
-		}
-		
 	});
 	
-	uuids.forEach((uuid) => {
-		
-		removeFilesByUuid(uuid);
-		
-	});
+	console.log("removing elements: ");
+	console.log(uuids);
+	console.log("uuids.length: " + uuids.length);
 	
-	window.location = link.href;
+	let removedFiles = 0;
+	if (uuids == null || uuids.length == 0) {
+		window.location = link.href;
+	}
+	else {
+		uuids.forEach((uuid) => {
+				
+			removeFileByUuid(uuid)
+				.then(() => {
+					removedFiles++;
+					if (removedFiles == uuids.length) {
+						window.location = link.href;
+					}
+				});
+				
+		});
+	}
+	
+	
 }
 
-function removeFilesByUuid(uuid) {
-	$.ajax({
+async function removeFileByUuid(uuid) {
+	
+	let response = false;
+	await $.ajax({
 		url: '/storage/delete/' + uuid,
 		method: 'DELETE',
 		success: (data) => {
 			if (data.removed) {
-				console.log('resource removed');
+				console.log('resource ' + uuid + ' removed');
 			}
 			else {
-				console.log('resource not removed');
+				console.log('resource ' + uuid + ' not removed');
 			}
+			response = data.removed;
 		}
 	});
+	
+	return response;
 }
