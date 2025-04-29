@@ -41,7 +41,10 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-4 px-2">
-                                    <label for="lastname-input" class="form-label">Фамилия</label>
+                                    <label for="lastname-input" class="form-label">
+                                    	Фамилия
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="text" id="lastname-input"
                                            autocomplete="off" name="lastname" th:value="*{lastname}"
                                     />
@@ -50,7 +53,10 @@
                                     </div>
                                 </div>
                                 <div class="col-4 px-2">
-                                    <label for="firstname-input" class="form-label">Имя</label>
+                                    <label for="firstname-input" class="form-label">
+                                    	Имя
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="text" id="firstname-input"
                                            autocomplete="off" name="firstname" th:value="*{firstname}"
                                     />
@@ -70,7 +76,10 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-4 px-2">
-                                    <label for="birthdate-input" class="form-label">Дата рождения</label>
+                                    <label for="birthdate-input" class="form-label">
+                                    	Дата рождения
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="date" id="birthdate-input"
                                            autocomplete="off" name="birthdate" th:value="*{birthdate}"
                                     />
@@ -79,13 +88,19 @@
                                     </div>
                                 </div>
                                 <div class="col-4 px-2">
-                                    <label for="citizenship-input" class="form-label">Гражданство</label>
+                                    <label for="citizenship-input" class="form-label">
+                                    	Гражданство
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="text" id="citizenship-input"
                                            autocomplete="off" name="citizenship" th:value="*{citizenship} ?: 'Россия'"
                                     />
                                 </div>
                                 <div class="col-4 px-2">
-                                    <label for="sex-input" class="form-label">Пол</label>
+                                    <label for="sex-input" class="form-label">
+                                    	Пол
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <select class="form-select" id="sex-input">
                                         <option selected>&lt;Не выбрано&gt;</option>
                                         <option th:each="s : ${sex}" th:text="${s.displayValue}" th:value="${s}"></option>
@@ -152,14 +167,20 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="passport-series-input" class="form-label">Серия паспорта</label>
+                                    <label for="passport-series-input" class="form-label">
+                                    	Серия
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="text"
                                            id="passport-series-input" placeholder="__ __" autocomplete="off"
                                            name="passportSeries" th:value="*{passport.series}"
                                     />
                                 </div>
                                 <div class="col-6">
-                                    <label for="passport-number-input" class="form-label">Номер паспорта</label>
+                                    <label for="passport-number-input" class="form-label">
+                                    	Номер
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="text"
                                            id="passport-number-input" placeholder="______" autocomplete="off"
                                            name="passportNumber" th:value="*{passport.number}"
@@ -168,14 +189,20 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-6">
-                                    <label for="passport-issue-date-input" class="form-label">Дата выдачи</label>
+                                    <label for="passport-issue-date-input" class="form-label">
+                                    	Дата выдачи
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="date"
                                            id="passport-issue-date-input" autocomplete="off"
                                            name="issueDate" th:value="*{passport.issueDate}"
                                     />
                                 </div>
                                 <div class="col-6">
-                                    <label for="passport-department-code-input" class="form-label">Код подразделения</label>
+                                    <label for="passport-department-code-input" class="form-label">
+                                    	Код подразделения
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="text"
                                            id="passport-department-code-input" placeholder="___-___"
                                            autocomplete="off"
@@ -185,7 +212,10 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-12">
-                                    <label for="passport-issue-place-input" class="form-label">Кем выдан</label>
+                                    <label for="passport-issue-place-input" class="form-label">
+                                    	Кем выдан
+                                    	<span style="color: #dc3545">*</span>
+                                    </label>
                                     <input class="form-control" type="text"
                                            id="passport-issue-place-input" autocomplete="off"
                                            name="issuePlace" th:value="*{passport.issuePlace}"
