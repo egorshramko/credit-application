@@ -8,6 +8,8 @@ $("#lastname-input").on('input', lastname_input_handler);
 $("#firstname-input").on('input', firstname_input_handler);
 $("#middlename-input").on('input', middlename_input_handler);
 
+$("#birthdate-input").on('change', birthdate_change_handler);
+
 $("#return-index-link").on('click', return_index_link_handler);
 
 //обработчик ввода фамилии
@@ -56,6 +58,24 @@ function highlight_invalid_field(element, input_valid) {
             element.removeClass('is-invalid');
         }
     }
+}
+
+
+function birthdate_change_handler(event) {
+	
+	let dateControl = $('#birthdate-input');
+	
+	let inputDate = new Date(dateControl.val());
+	inputDate.setHours(0, 0, 0, 0);
+	
+	let todayDate = new Date();
+	todayDate.setHours(0, 0, 0, 0);
+	
+	let maxInputDate = new Date(todayDate);
+	maxInputDate.setFullYear(maxInputDate.getFullYear() - 18);
+	
+	highlight_invalid_field(dateControl, inputDate < maxInputDate);
+	
 }
 
 async function return_index_link_handler(event) {

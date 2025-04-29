@@ -74,6 +74,9 @@
                                     <input class="form-control" type="date" id="birthdate-input"
                                            autocomplete="off" name="birthdate" th:value="*{birthdate}"
                                     />
+                                    <div class="invalid-feedback">
+                                    	<span>Клиент должен быть старше 18 лет</span>
+                                    </div>
                                 </div>
                                 <div class="col-4 px-2">
                                     <label for="citizenship-input" class="form-label">Гражданство</label>
