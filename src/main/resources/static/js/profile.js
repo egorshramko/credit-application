@@ -60,7 +60,7 @@ function highlight_invalid_field(element, input_valid) {
     }
 }
 
-
+//обработчик смены даты рождения
 function birthdate_change_handler(event) {
 	
 	let dateControl = $('#birthdate-input');
