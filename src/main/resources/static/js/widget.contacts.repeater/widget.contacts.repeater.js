@@ -12,6 +12,7 @@ function addContact() {
 	let contactContainer = document.createElement('div');
 	contactContainer.classList.add('row');
 	contactContainer.classList.add('my-2');
+	contactContainer.classList.add('contact-element');
 	
 	//подбор подходящего айдишника для элемента контакта
 	let contactContainerNumber = contactsRepeater.childNodes.length;

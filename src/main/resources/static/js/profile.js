@@ -265,8 +265,106 @@ function sendProfileHandler(event) {
 	
 	console.log("Валидация обязательных полей");
 	
-	let validateResult = validateProfileForm();
+	let formValid = validateProfileForm();
 	
+	if (formValid) {
+		console.log("Все обязательные поля заполнены, формируем запрос на сервер");
+		hideErrorAlert();
+		
+		let formDataJson = mapFormData();
+		console.log(formDataJson);
+	}
+	else {
+		console.log("Некоторые обязательные поля не заполнены");
+		
+		showErrorAlert("Ошибка заполнения анкеты. Пожалуйста, исправьте ошибки на форме, а затем повторите попытку.");
+		
+	}
+	
+}
+
+//функция показа уведомления об ошибке
+function showErrorAlert(message) {
+	
+	$("#error-alert-container").load('/static/html/profile.error.alert.html', () => {
+		$("#error-alert-container .alert-container").html(message);
+	});
+	
+	console.log($("#error-alert-container"));
+	
+	window.scrollTo(0, 0);
+}
+
+//функция скрытия уведомления об ошибке
+function hideErrorAlert() {
+	$("#error-alert-container").empty();
+}
+
+//функция маппинга данных из формы
+function mapFormData() {
+	let formData = {};
+	formData.lastname = $("#lastname-input").val();
+	formData.firstname = $("#firstname-input").val();
+	formData.middlename = $("#middlename-input").val();
+	formData.birthdate = $("#birthdate-input").val();
+	formData.citizenship = $("#citizenship-input").val();
+	formData.sex = $("#sex-input").val();
+	
+	if (!!$("#photo-load-widget").attr("value")) {
+		formData.photo = $("#photo-load-widget").attr('value');
+		console.log(formData.photo);
+	}
+	
+	formData.passport = {};
+	formData.passport.series = $("#passport-series-input").val();
+	formData.passport.number = $("#passport-number-input").val();
+	formData.passport.issueDate = $("#passport-issue-date-input").val();
+	formData.passport.departmentCode = $("#passport-department-code-input").val();
+	formData.passport.issuePlace = $("#passport-issue-place-input").val();
+	
+	if (!$("#scans-collection-container").is(":empty")) {
+		formData.passport.scans = [];
+		
+		$("#scans-collection-container").find(".scan-element").each((i, scan) => {
+			let scanData = {};
+			
+			console.log("scan");
+			console.log(scan);
+			scanData.id = scan.getAttribute('value');
+			formData.passport.scans.push(scanData);
+		});
+	}
+	
+	if (!$("#contacts-repeater").is(":empty")) {
+		
+		formData.contacts = [];
+		
+		$("#contacts-repeater").find(".contact-element").each((i, contact) => {
+			
+			let contactElementId = contact.getAttribute('id');
+			contactElementId = contactElementId.replace('contact-', '');
+			
+			let contactData = {};
+			contactData.contactType = $("#contact-type-input-" + contactElementId).val();
+			contactData.phoneNumber = $("#contact-value-" + contactElementId).val();
+			contactData.comment = $("#contact-comment-" + contactElementId).val();
+			
+			formData.contacts.push(contactData);
+		});
+		
+	}
+	
+	if (!!$("#tin-input").val()) {
+		formData.tin = $("#tin-input").val();
+	}
+	
+	if (!!$("#comment-input").val()) {
+		formData.comment = $("#comment-input").val();
+	}
+	
+	formData.consentPersonalData = $("#consent-personal-data-input").is(":checked");
+	
+	return JSON.stringify(formData);
 }
 
 /*
