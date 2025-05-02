@@ -128,7 +128,16 @@ function check_input(element) {
     return regex.test(input_value);
 }
 
-//Подсветка некорректно заполненного поля
+/**
+ * Функция управления подсветкой некорректности элемента страницы
+ * Подсвечивает красным поле, если условие input_valid = false, снимает подсветку в противном случае
+ * 
+ * Параметры:
+ * element - jquery объект элемента страницы
+ * input_valid - необязательный булевый параметр для управления подсветкой
+ * message - необязательный параметр. Отображаемое сообщение в случае некорректности поля
+ * 
+ */
 function highlight_invalid_field(element, input_valid = true, message = "") {
     
 	//родительский контейнер
@@ -260,6 +269,16 @@ function sendProfileHandler(event) {
 	
 }
 
+/*
+ * Функция проверки заполнения текстовых полей.
+ * В случае, если поле пустое, оно подсвечивается красным и отображает сообщение
+ * 
+ * Параметры:
+ *  element - jquery объект типа input
+ *  baseMessage - базовое сообщение, которое будет выводиться, 
+ * 		если поле уже подсвечено красным и все еще некорректно (необязательный параметр)
+ *  additionalCheck - дополнительные условия проверки (необязательный параметр)
+ */
 function validateField(element, baseMessage = "", additionalChecks = true) {
 	let elementValue = element.val();
 	let elementInvalid = elementValue == "" || elementValue == null ||
