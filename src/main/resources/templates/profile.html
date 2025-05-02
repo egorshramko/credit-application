@@ -95,6 +95,9 @@
                                     <input class="form-control" type="text" id="citizenship-input"
                                            autocomplete="off" name="citizenship" th:value="*{citizenship} ?: 'Россия'"
                                     />
+                                    <div class="invalid-feedback">
+                                    	<span></span>
+                                    </div>
                                 </div>
                                 <div class="col-4 px-2">
                                     <label for="sex-input" class="form-label">
@@ -102,9 +105,12 @@
                                     	<span style="color: #dc3545">*</span>
                                     </label>
                                     <select class="form-select" id="sex-input">
-                                        <option selected>&lt;Не выбрано&gt;</option>
-                                        <option th:each="s : ${sex}" th:text="${s.displayValue}" th:value="${s}"></option>
+                                        <option th:selected="*{sex == null}" th:value="${null}">&lt;Не выбрано&gt;</option>
+                                        <option th:each="s : ${sex}" th:selected="${credit.profile.sex == s}" th:text="${s.displayValue}" th:value="${s}"></option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                    	<span></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -175,6 +181,9 @@
                                            id="passport-series-input" placeholder="__ __" autocomplete="off"
                                            name="passportSeries" th:value="*{passport.series}"
                                     />
+                                    <div class="invalid-feedback">
+                                    	<span></span>
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <label for="passport-number-input" class="form-label">
@@ -185,6 +194,9 @@
                                            id="passport-number-input" placeholder="______" autocomplete="off"
                                            name="passportNumber" th:value="*{passport.number}"
                                     />
+                                    <div class="invalid-feedback">
+                                    	<span></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -197,6 +209,9 @@
                                            id="passport-issue-date-input" autocomplete="off"
                                            name="issueDate" th:value="*{passport.issueDate}"
                                     />
+                                    <div class="invalid-feedback">
+                                    	<span></span>
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <label for="passport-department-code-input" class="form-label">
@@ -208,6 +223,9 @@
                                            autocomplete="off"
                                            name="departmentCode" th:value="*{passport.departmentCode}"
                                     />
+                                    <div class="invalid-feedback">
+                                    	<span></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -220,6 +238,9 @@
                                            id="passport-issue-place-input" autocomplete="off"
                                            name="issuePlace" th:value="*{passport.issuePlace}"
                                     />
+                                    <div class="invalid-feedback">
+                                    	<span></span>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Коллекция сканов паспорта -->
@@ -340,7 +361,11 @@
 	                            		/>
 	                            		<label class="form-check-label" for="consent-personal-data-input">
 	                            			Согласие на обработку персональных данных
+	                            			<span style="color: #dc3545">*</span>
 	                            		</label>
+	                            		<div class="invalid-feedback">
+	                            			<span>Пожалуйста, дайте согласие на обработку данных</span>
+	                            		</div>
 	                            	</div>
                             	</div>
                             </div>
@@ -354,10 +379,10 @@
         <div class="container my-3">
             <div class="row">
             	<div class="col-6 d-flex justify-content-start">
-            		<button class="btn btn-primary">Заполнить анкету</button>
+            		<button id="send-profile-btn" class="btn btn-primary">Заполнить анкету</button>
             	</div>
             	<div class="col-6 d-flex justify-content-end">
-            		<button class="btn btn-danger">Отказаться от оформления</button>
+            		<button id="refuse-btn" class="btn btn-danger">Отказаться от оформления</button>
             	</div>
             		
             </div>
