@@ -6,6 +6,8 @@ import lombok.Data;
 
 @Data
 public class ClientProfileDto {
+	
+	private Long id;
 	private String lastname;
 	private String firstname;
 	private String middlename;

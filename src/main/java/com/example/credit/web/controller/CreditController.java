@@ -5,6 +5,9 @@ import com.example.credit.data.enums.ContactType;
 import com.example.credit.data.enums.CreditStage;
 import com.example.credit.data.enums.Sex;
 import com.example.credit.service.CreditService;
+import com.example.credit.web.api.dto.profile.ClientProfileDto;
+
+import jakarta.json.Json;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -12,6 +15,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -88,5 +93,7 @@ public class CreditController {
 		return "profile";
 
 	}
+	
+	
 
 }

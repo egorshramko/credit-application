@@ -118,5 +118,15 @@ public class CreditServiceImpl implements CreditService {
 
 		return credit;
 	}
+	
+	@Override
+	public ClientProfile getProfileByCreditId(Long creditId) {
+		
+		return creditRepository.findById(creditId)
+								.map(credit -> credit.getProfile())
+								.orElse(null);
+		
+		
+	}
 
 }
