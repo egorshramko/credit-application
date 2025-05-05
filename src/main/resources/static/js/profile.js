@@ -116,7 +116,19 @@ function passport_issue_place_input_handler() {
 }
 
 function consent_personal_data_input_handler() {
+	console.log("Кликнули на согласие на обработку данных")
 	let consent_personal_data_input = $("#consent-personal-data-input");
+	let fill_profile_btn = $("#send-profile-btn");
+	
+	if (!!consent_personal_data_input.is(":checked") && 
+		fill_profile_btn.hasClass("disabled")) {
+	
+		fill_profile_btn.removeClass("disabled");
+	}
+	else {
+		fill_profile_btn.addClass("disabled");
+	}
+	
 	highlight_invalid_field(consent_personal_data_input);
 }
 
@@ -261,7 +273,7 @@ async function removeFileByUuid(uuid) {
 }
 
 //обработчик нажатия на кнопку "Заполнить анкету"
-function sendProfileHandler(event) {
+async function sendProfileHandler(event) {
 	
 	console.log("Валидация обязательных полей");
 	
@@ -273,6 +285,8 @@ function sendProfileHandler(event) {
 		
 		let formDataJson = mapFormData();
 		console.log(formDataJson);
+		
+		await sendFormDataJson(formDataJson);
 	}
 	else {
 		console.log("Некоторые обязательные поля не заполнены");
@@ -281,6 +295,21 @@ function sendProfileHandler(event) {
 		
 	}
 	
+}
+
+//функция 
+async function sendFormDataJson(formDataJson) {
+	console.log("Отправка запроса на сервер");
+	
+	let response = await fetch('/api' + window.location.pathname + '/verificate', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json;charset=utf-8'
+		},
+		body: formDataJson
+	});
+	
+	console.log(response);
 }
 
 //функция показа уведомления об ошибке
@@ -322,7 +351,7 @@ function mapFormData() {
 	formData.passport.departmentCode = $("#passport-department-code-input").val();
 	formData.passport.issuePlace = $("#passport-issue-place-input").val();
 	
-	if (!$("#scans-collection-container").is(":empty")) {
+	if ($("#scans-collection-container").find(".scan-element").length > 0) {
 		formData.passport.scans = [];
 		
 		$("#scans-collection-container").find(".scan-element").each((i, scan) => {
@@ -335,7 +364,7 @@ function mapFormData() {
 		});
 	}
 	
-	if (!$("#contacts-repeater").is(":empty")) {
+	if ($("#contacts-repeater").find(".contact-element").length > 0) {
 		
 		formData.contacts = [];
 		
