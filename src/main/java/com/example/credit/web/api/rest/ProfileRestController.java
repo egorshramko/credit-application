@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping(path = "/api/credit/{id}/profile", produces = "application/json")
-public class ProfileController {
+public class ProfileRestController {
 	
 	/*
 	 * TODO:

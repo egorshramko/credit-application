@@ -21,46 +21,17 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 @ControllerAdvice
 @RequestMapping("/credit/{id}")
-@SessionAttributes("credit")
 public class CreditController {
 
 	@Autowired
 	private CreditService creditService;
 
-	@ModelAttribute("sex")
-	public Sex[] addSexEnumToModel(Model model) {
-
-		return Sex.values();
-
-	}
-	
-	@ModelAttribute("contactTypes")
-	public ContactType[] addContactTypesToModel(Model model) {
-		
-		return ContactType.values();
-		
-	}
-	
-	@ModelAttribute("displayValues")
-	public Iterable<String> addContactTypesDisplayValuesToModel(Model model) {
-		
-		List<String> displayValues = new ArrayList<>();
-		for (ContactType ct : ContactType.values()) {
-			displayValues.add(ct.getDisplayValue());
-		}
-		
-		return displayValues;
-		
-	}
-
 	@GetMapping
-	public String getCreditStageView(@PathVariable("id") String creditId, Model model) {
+	public String getCreditStageView(@PathVariable("id") String creditId) {
 
 		Credit credit = creditService.getCreditById(creditId);
 
 		if (credit != null) {
-
-			model.addAttribute("credit", credit);
 
 			if (credit.getStage() == CreditStage.CREDIT_FORM) {
 				return "redirect:/credit/" + credit.getId() + "/profile";
@@ -78,15 +49,6 @@ public class CreditController {
 
 	}
 
-	@GetMapping("/profile")
-	public String getProfilePage(@PathVariable("id") String creditId, Model model) {
-
-		if (!model.containsAttribute("credit")) {
-			return "redirect:/credit/" + creditId;
-		}
-
-		return "profile";
-
-	}
+	
 
 }

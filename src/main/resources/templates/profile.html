@@ -36,7 +36,7 @@
                 <h2>Заполнение анкеты</h2>
             </div>
             <div class="container mt-3">
-                <form id="profile-form" th:object="${credit.profile}">
+                <form id="profile-form" th:object="${profile}">
                     <div class="row">
                         <div class="col-8 border rounded py-2 mb-2">
                             <div class="row">
@@ -111,7 +111,7 @@
                                     </label>
                                     <select class="form-select" id="sex-input">
                                         <option th:selected="*{sex == null}" th:value="${null}">&lt;Не выбрано&gt;</option>
-                                        <option th:each="s : ${sex}" th:selected="${credit.profile.sex == s}" th:text="${s.displayValue}" th:value="${s}"></option>
+                                        <option th:each="s : ${sex}" th:selected="${profile.sex == s}" th:text="${s.displayValue}" th:value="${s}"></option>
                                     </select>
                                     <div class="invalid-feedback">
                                     	<span></span>
@@ -255,10 +255,7 @@
                                     <div id="passport-scans-container">
                                         <input id="scans-control" type="file" accept=".jpg, .png, .jpeg" class="d-none" />
                                         <div id="scans-collection-container" class="scans-collection-widget row m-0">
-                                            <!--p th:if="*{passport.scans.size() == 0}">Коллекция сканов пуста</p-->
-                                            <!--div class="row border rounded" th:each="scan : ${credit.profile.passport.scans}">
-                                                <p th:value="${scan.scanFile.name}"></p>
-                                            </div-->
+                                            
                                             <div th:each="scan : *{passport.scans}" 
                                                 th:id="${'passport-scan-' + scan.id}" 
                                                 th:value="${scan.id}"
