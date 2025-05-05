@@ -70,5 +70,9 @@ public class ClientProfile {
 
 	@OneToOne
 	private BinaryContent photo;
+	
+	public void addContact(Contact contact) {
+		contacts.add(contact);
+	}
 
 }

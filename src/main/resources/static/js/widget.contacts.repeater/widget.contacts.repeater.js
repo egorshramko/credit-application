@@ -1,8 +1,20 @@
 $("#add-contact-button").on('click', addContact);
 $(".phone-input").click().mask("+7 (999) 999-99-99");
 
+//функция показа уведомления об ошибке (вообще когда-нибудь я это вытащу в отдельный файл)
+function showErrorAlert(message) {
+	
+	$("#error-alert-container").load('/static/html/profile.error.alert.html', () => {
+		$("#error-alert-container .alert-container").html(message);
+	});
+	
+	console.log($("#error-alert-container"));
+	
+	window.scrollTo(0, 0);
+}
+
 //функция добавления способа связи
-function addContact() {
+async function addContact() {
 	console.log("Добавляем способ связи");
 	
 	//получаем контейнер повторителя
@@ -13,6 +25,22 @@ function addContact() {
 	contactContainer.classList.add('row');
 	contactContainer.classList.add('my-2');
 	contactContainer.classList.add('contact-element');
+	
+	//вызов api для добавления контакта
+	let addContactResponse = await fetch(window.location.pathname + '/addContact', {
+		method: 'POST'
+	});
+	
+	if (addContactResponse.ok) {
+		let responseBody = await addContactResponse.json();
+		contactContainer.setAttribute('value', responseBody.id);
+	}
+	else {
+		console.error("Ошибка добавления контакта: ", addContactResponse.error);
+		showErrorAlert("Произошла ошибка при добавлении контакта. Обновите страницу и повторите попытку.");
+		return;	
+	}
+	
 	
 	//подбор подходящего айдишника для элемента контакта
 	let contactContainerNumber = contactsRepeater.childNodes.length;
