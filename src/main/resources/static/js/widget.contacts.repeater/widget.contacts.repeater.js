@@ -183,7 +183,7 @@ async function addContact() {
 	
 }
 
-function removeContactButtonHandler(event) {
+async function removeContactButtonHandler(event) {
 	console.log("Попробовали удалить контакт!");
 	console.log(event.target.tagName);
 	
@@ -192,6 +192,27 @@ function removeContactButtonHandler(event) {
 	let contactId = removeButton.getAttribute('id').replace('contact-remove-', '');
 	
 	let contactContainer = document.getElementById('contact-' + String(contactId));
-	contactContainer.remove();
+	
+	let contactContainerUUID = contactContainer.getAttribute('value');
+	console.log("contact container value: " + contactContainerUUID);
+	
+	let requestBody = {
+		uuid: contactContainerUUID
+	};
+	let contactRemoveResponse = await fetch(window.location.pathname + '/removeContact', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json;charset=utf-8'
+		},
+		body: JSON.stringify(requestBody)
+	});
+	
+	if (contactRemoveResponse.ok) {
+		contactContainer.remove();
+	}
+	else {
+		console.error("Ошибка удаления контакта: ", contactRemoveResponse.error);
+		showErrorAlert("Произошла ошибка при удалении контакта. Обновите страницу и повторите попытку.");
+	}
 	
 }

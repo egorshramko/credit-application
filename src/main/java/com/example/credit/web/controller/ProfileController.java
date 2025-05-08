@@ -11,9 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -23,6 +25,7 @@ import com.example.credit.data.Credit;
 import com.example.credit.data.enums.ContactType;
 import com.example.credit.data.enums.Sex;
 import com.example.credit.service.CreditService;
+import com.example.credit.web.api.dto.profile.ContactDto;
 
 import jakarta.json.Json;
 import jakarta.servlet.http.HttpSession;
@@ -95,6 +98,38 @@ public class ProfileController {
 							.add("id", newContactUUID.toString())
 							.build()
 							.toString());
+		}
+		
+		return ResponseEntity.internalServerError()
+				.build();
+	}
+	
+	@PostMapping(path = "/removeContact")
+	@ResponseBody
+	public ResponseEntity<String> removeContactFromProfile(HttpSession session, @RequestBody ContactDto contactDto) {
+		
+		Object profileObj = session.getAttribute("profile");
+		
+		if (profileObj instanceof ClientProfile) {
+			ClientProfile profile = (ClientProfile) profileObj;
+			
+			log.info("profile id: " + profile.getId().toString());
+			log.info("contacts.size: " + Integer.toString(profile.getContacts().size()));
+			
+			UUID removedContactUUID = UUID.fromString(contactDto.getUuid());
+			if (profile.removeContact(removedContactUUID)) {
+				
+				log.info("contact removed");
+				log.info("contacts.size: " + Integer.toString(profile.getContacts().size()));
+				
+				return ResponseEntity.ok()
+						.build();
+			}
+			
+			log.warn("incorrect contact UUID!");
+			log.info("contacts.size: " + Integer.toString(profile.getContacts().size()));
+			return ResponseEntity.notFound()
+					.build();
 		}
 		
 		return ResponseEntity.internalServerError()

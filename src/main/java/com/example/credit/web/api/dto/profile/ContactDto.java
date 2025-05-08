@@ -8,5 +8,6 @@ public class ContactDto {
 	private String contactType;
 	private String phoneNumber;
 	private String comment;
+	private String uuid;
 	
 }
