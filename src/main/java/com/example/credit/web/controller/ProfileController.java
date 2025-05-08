@@ -1,5 +1,6 @@
 package com.example.credit.web.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,17 +19,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.credit.data.BinaryContent;
 import com.example.credit.data.ClientProfile;
 import com.example.credit.data.Contact;
 import com.example.credit.data.Credit;
 import com.example.credit.data.enums.ContactType;
 import com.example.credit.data.enums.Sex;
 import com.example.credit.service.CreditService;
+import com.example.credit.storage.service.TempStorageService;
 import com.example.credit.web.api.dto.profile.ContactDto;
 
 import jakarta.json.Json;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -39,6 +44,9 @@ public class ProfileController {
 
 	@Autowired
 	private CreditService creditService;
+	
+	@Autowired
+	private TempStorageService tempStorageService;
 	
 	@ModelAttribute("sex")
 	public Sex[] addSexEnumToModel(Model model) {
@@ -135,5 +143,37 @@ public class ProfileController {
 		return ResponseEntity.internalServerError()
 				.build();
 	}
+	
+	@PostMapping("/addPhoto")
+	@ResponseBody
+	public ResponseEntity<?> addPhotoToProfile(HttpSession session, @RequestParam(value = "file", required = false) @Valid final MultipartFile file) {
+		
+		Object profileObj = session.getAttribute("profile");
+		
+		if (profileObj instanceof ClientProfile) {
+			
+			ClientProfile profile = (ClientProfile) profileObj;
+			
+			try {
+				UUID photoUUID = tempStorageService.upload(file);
+				profile.setPhoto(BinaryContent.builder()
+									.uuid(photoUUID)
+									.build());
+				
+				return ResponseEntity.ok(Json.createObjectBuilder()
+											.add("id", photoUUID.toString())
+											.build());
+				
+			}
+			catch (IOException exception) {
+				return ResponseEntity.badRequest().build();
+			}
+			
+		}
+		
+		return ResponseEntity.internalServerError()
+				.build();
+	}
+	
 	
 }
