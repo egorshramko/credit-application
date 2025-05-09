@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface TempProfileService {
 	ClientProfile addPassportScan(ClientProfile profile, UUID scanUUID);
+	ClientProfile deletePassportScan(ClientProfile profile, UUID scanUUID);
+	boolean isPassportScanIdValid(ClientProfile profile, UUID scanUUID);
 }

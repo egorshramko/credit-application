@@ -8,6 +8,7 @@ import com.example.credit.service.TempProfileService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -29,6 +30,38 @@ public class TempProfileServiceImpl implements TempProfileService {
 		
 		return profile;
 		
+	}
+	
+	@Override
+	public ClientProfile deletePassportScan(ClientProfile profile, 
+			UUID scanUUID) {
+		
+		Passport passport = profile.getPassport();
+		passport.removeScan(scanUUID);
+		
+		return profile;
+		
+	}
+	 
+	@Override
+	public boolean isPassportScanIdValid(ClientProfile profile,
+			UUID scanUUID) {
+		
+		Passport passport = profile.getPassport();
+		PassportScan passportScan = passport.getScans()
+			.stream()
+			.filter(scan -> {
+				BinaryContent scanFile = scan.getScanFile();
+				if (scanFile != null) {
+					return scanFile.getUuid().equals(scanUUID);
+				}
+				
+				return false;
+			})
+			.findFirst()
+			.orElse(null);
+		
+		return passportScan != null;
 	}
 	
 	

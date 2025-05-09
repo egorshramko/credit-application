@@ -82,14 +82,11 @@ public class ProfileController {
 		
 	}
 	
-	@ModelAttribute
-	public void addProfileToModel(@PathVariable("id") String creditId, Model model) {
+	@GetMapping
+	public String getProfilePage(@PathVariable("id") String creditId, Model model) {
+		
 		Credit credit = creditService.getCreditById(creditId);
 		model.addAttribute("profile", Optional.ofNullable(credit.getProfile()).orElse(new ClientProfile()));
-	}
-	
-	@GetMapping
-	public String getProfilePage(Model model) {
 		
 		return "profile";
 
@@ -158,7 +155,8 @@ public class ProfileController {
 	
 	@PostMapping("/photo")
 	@ResponseBody
-	public ResponseEntity<?> addPhotoToProfile(HttpSession session, @RequestParam(value = "file", required = false) @Valid final MultipartFile file) {
+	public ResponseEntity<?> addPhotoToProfile(HttpSession session, 
+			@RequestParam(value = "file", required = false) @Valid final MultipartFile file) {
 		
 		Object profileObj = session.getAttribute("profile");
 		
@@ -278,8 +276,37 @@ public class ProfileController {
 	public ResponseEntity<?> deletePassportScanFromProfile(HttpSession session, 
 			@PathVariable("scanId") String scanUUID) {
 		
+		ClientProfile profile = this.getProfileFromSession(session);
+		UUID scanUUIDObject = UUID.fromString(scanUUID);
 		
-		return ResponseEntity.ok().build();
+		//проверяем валидность переданного идентификатора
+		if (tempProfileService.isPassportScanIdValid(profile, scanUUIDObject)) {
+			
+			try {
+				tempStorageService.remove(scanUUIDObject);
+				tempProfileService.deletePassportScan(profile, scanUUIDObject);
+				
+				session.setAttribute("profile", profile);
+				return ResponseEntity.ok()
+						.body(Json.createObjectBuilder()
+								.add("removed", true)
+								.build()
+								.toString());
+				
+			}
+			catch (IOException ioException) {
+				log.error(ioException.toString());
+				
+				return ResponseEntity.internalServerError()
+						.build();
+			}
+			
+			
+		}
+		else {
+			return ResponseEntity.notFound()
+					.build();
+		}
 		
 	}
 	

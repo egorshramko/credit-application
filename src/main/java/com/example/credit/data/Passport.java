@@ -7,6 +7,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -47,6 +48,21 @@ public class Passport {
 
 	public void addScan(PassportScan scan) {
 		scans.add(scan);
+	}
+	
+	public boolean removeScan(UUID scanUUID) {
+		return scans.remove(this.scans
+				.stream()
+				.filter(scan -> {
+					BinaryContent scanFile = scan.getScanFile();
+					
+					if (scanFile != null) {
+						return scanFile.getUuid().equals(scanUUID);
+					}
+					return false;
+				})
+				.findFirst()
+				.orElse(null));
 	}
 
 }
