@@ -200,7 +200,7 @@ async function removeContactButtonHandler(event) {
 		uuid: contactContainerUUID
 	};
 	let contactRemoveResponse = await fetch(window.location.pathname + '/removeContact', {
-		method: 'POST',
+		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json;charset=utf-8'
 		},

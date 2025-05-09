@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,10 +30,13 @@ import com.example.credit.data.Credit;
 import com.example.credit.data.enums.ContactType;
 import com.example.credit.data.enums.Sex;
 import com.example.credit.service.CreditService;
+import com.example.credit.service.TempProfileService;
 import com.example.credit.storage.service.TempStorageService;
+import com.example.credit.web.api.dto.BinaryContentDto;
 import com.example.credit.web.api.dto.profile.ContactDto;
 
 import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +52,9 @@ public class ProfileController {
 	
 	@Autowired
 	private TempStorageService tempStorageService;
+	
+	@Autowired
+	private TempProfileService tempProfileService;
 	
 	@ModelAttribute("sex")
 	public Sex[] addSexEnumToModel(Model model) {
@@ -74,17 +82,20 @@ public class ProfileController {
 		
 	}
 	
-	@GetMapping
-	public String getProfilePage(@PathVariable("id") String creditId, Model model) {
-		
+	@ModelAttribute
+	public void addProfileToModel(@PathVariable("id") String creditId, Model model) {
 		Credit credit = creditService.getCreditById(creditId);
 		model.addAttribute("profile", Optional.ofNullable(credit.getProfile()).orElse(new ClientProfile()));
+	}
+	
+	@GetMapping
+	public String getProfilePage(Model model) {
 		
 		return "profile";
 
 	}
 	
-	@PostMapping(path = "/addContact")
+	@PostMapping("/contact")
 	@ResponseBody
 	public ResponseEntity<String> addContactToProfile(HttpSession session) {
 		
@@ -112,9 +123,10 @@ public class ProfileController {
 				.build();
 	}
 	
-	@PostMapping(path = "/removeContact")
+	@DeleteMapping("/contact/{contactId}")
 	@ResponseBody
-	public ResponseEntity<String> removeContactFromProfile(HttpSession session, @RequestBody ContactDto contactDto) {
+	public ResponseEntity<String> removeContactFromProfile(HttpSession session,
+			@PathVariable("contactId") String contactUUID) {
 		
 		Object profileObj = session.getAttribute("profile");
 		
@@ -124,7 +136,7 @@ public class ProfileController {
 			log.info("profile id: " + profile.getId().toString());
 			log.info("contacts.size: " + Integer.toString(profile.getContacts().size()));
 			
-			UUID removedContactUUID = UUID.fromString(contactDto.getUuid());
+			UUID removedContactUUID = UUID.fromString(contactUUID);
 			if (profile.removeContact(removedContactUUID)) {
 				
 				log.info("contact removed");
@@ -144,7 +156,7 @@ public class ProfileController {
 				.build();
 	}
 	
-	@PostMapping("/addPhoto")
+	@PostMapping("/photo")
 	@ResponseBody
 	public ResponseEntity<?> addPhotoToProfile(HttpSession session, @RequestParam(value = "file", required = false) @Valid final MultipartFile file) {
 		
@@ -160,9 +172,7 @@ public class ProfileController {
 									.uuid(photoUUID)
 									.build());
 				
-				return ResponseEntity.ok(Json.createObjectBuilder()
-											.add("id", photoUUID.toString())
-											.build());
+				return ResponseEntity.ok(photoUUID.toString());
 				
 			}
 			catch (IOException exception) {
@@ -173,6 +183,115 @@ public class ProfileController {
 		
 		return ResponseEntity.internalServerError()
 				.build();
+	}
+	
+	@DeleteMapping("/photo")
+	@ResponseBody
+	public ResponseEntity<?> removePhotoFromProfile(HttpSession session, 
+													@RequestBody BinaryContentDto dto) {
+		
+		Object profileObj = session.getAttribute("profile");
+		
+		if (profileObj instanceof ClientProfile) {
+			
+			ClientProfile profile = (ClientProfile) profileObj;
+			log.info("profile id: " + profile.getId());
+			
+			BinaryContent photo = Optional.ofNullable(profile.getPhoto()).orElse(null);
+			if (photo.getUuid().equals(UUID.fromString(dto.getUuid()))) {
+				log.info("remove photo from profile");
+				
+				
+				try {
+					tempStorageService.remove(photo.getUuid());
+				}
+				catch (IOException exception) {
+					log.error("This photo is not exists!");
+				}
+				
+			}
+		}
+		
+		return ResponseEntity.internalServerError().build();
+		
+	}
+	
+	/**
+	 * Метод добавления скана паспорта в анкету.
+	 * 
+	 * Сохраняет во временном файловом хранилище файл скана паспорта 
+	 * клиента, после чего полученный идентификатор привязывает
+	 * к анкете.
+	 * 
+	 * Для выполнения метода необходимо вызвать endpoint 
+	 * /credit/{id}/profile/scan по методу POST
+	 * 
+	 * @param session - объект пользовательской 
+	 *     сессии
+	 * @param file - файл скана паспорта, полученный от клиента
+	 *     в теле запроса
+	 * 
+	 * @return
+	 * Код 200 и тело ответа с id скана во временном хранилище
+	 *     в случае успешного сохранения скана
+	 * 
+	 */
+	@PostMapping("/scan")
+	@ResponseBody
+	public ResponseEntity<?> addPassportScanToProfile(HttpSession session, 
+			@RequestParam(value = "file", required = false) 
+			@Valid 
+			final MultipartFile file) {
+		
+		try {
+			UUID tempStorageFileUUID = tempStorageService.upload(file);
+			
+			ClientProfile profile = this.getProfileFromSession(session);
+			tempProfileService.addPassportScan(profile, tempStorageFileUUID);
+			
+			return ResponseEntity.ok(Json.createObjectBuilder()
+					.add("id", tempStorageFileUUID.toString())
+					.build()
+					.toString());
+			
+		}
+		catch (IOException exception) {
+			log.error(exception.toString());
+			
+			return ResponseEntity.badRequest()
+					.body(Json.createObjectBuilder()
+							.add("message", exception.getMessage()));
+		}
+		
+	}
+	
+	@GetMapping(path = "/scan/{scanId}")
+	public ResponseEntity<?> downloadPassportScan(HttpSession session,
+			@PathVariable("scanId") String scanUUID) {
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	
+	@DeleteMapping("/scan/{scanId}")
+	@ResponseBody
+	public ResponseEntity<?> deletePassportScanFromProfile(HttpSession session, 
+			@PathVariable("scanId") String scanUUID) {
+		
+		
+		return ResponseEntity.ok().build();
+		
+	}
+	
+	private ClientProfile getProfileFromSession(HttpSession session) {
+		
+		Object profile = session.getAttribute("profile");
+		if (profile instanceof ClientProfile) {
+			return (ClientProfile) profile;
+		}
+		
+		return null;
+		
 	}
 	
 	
