@@ -1,12 +1,18 @@
 package com.example.credit.web.controller;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -263,11 +269,68 @@ public class ProfileController {
 		
 	}
 	
+	//TODO: написать нормальный JavaDoc
+	//метод скачивания скана паспорта
 	@GetMapping(path = "/scan/{scanId}")
 	public ResponseEntity<?> downloadPassportScan(HttpSession session,
 			@PathVariable("scanId") String scanUUID) {
 		
-		return ResponseEntity.ok().build();
+		log.info("Request to download passport scan with id " + scanUUID);
+		
+		//получаем анкету из сессии и преобразуем ид скана
+		ClientProfile profile = this.getProfileFromSession(session);
+		UUID scanUUIDObject = UUID.fromString(scanUUID);
+		if (profile == null) {
+			
+			log.error("Profile is not exist in this session");
+			log.error("session id: " + session.getId());
+			
+			return ResponseEntity.internalServerError()
+					.build();
+		}
+		
+		//проверка корректности ид скана
+		if (!tempProfileService
+				.isPassportScanIdValid(profile, scanUUIDObject)) {
+			
+			log.info("Invalid passport scan uuid");
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(Json.createObjectBuilder()
+							.add("message", "Invalid passport scan uuid")
+							.build()
+							.toString());
+		}
+		
+		//подготовка файла для передачи клиенту
+		try {
+			Path scanFilePath = tempStorageService.download(UUID.fromString(scanUUID));
+			Resource fileResource = new FileSystemResource(
+					scanFilePath);
+			
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add(HttpHeaders.CONTENT_DISPOSITION, 
+					"attachment; filename=\"" + 
+							tempStorageService.getFileNameById(
+									UUID.fromString(scanUUID)));
+			
+			return ResponseEntity.ok()
+					.headers(responseHeaders)
+					.contentLength(scanFilePath.toFile().length())
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(fileResource);
+					
+		}
+		catch (IOException exception) {
+			log.error(exception.toString());
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(Json.createObjectBuilder()
+							.add("message", exception.getMessage())
+							.build()
+							.toString());
+		}
+		
 	}
 	
 	
