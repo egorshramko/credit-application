@@ -97,11 +97,12 @@ async function sendPhoto(url) {
 		data: formData, 
 		cache: false, 
 		contentType: false, 
+		dataType: 'json',
 		processData: false, 
 		method: 'POST',
 		success: (data) => {
 			let photoLoadWidget = document.getElementById('photo-load-widget');
-			photoLoadWidget.setAttribute('value', data);
+			photoLoadWidget.setAttribute('value', data.id);
 		}
 	});
 }	
