@@ -93,7 +93,7 @@ async function sendPhoto(url) {
 		.then(response => response.blob());
 	formData.append("file", new File([photoBlob], 'avatar.png'));
 	$.ajax({
-		url: window.location.pathname + '/addPhoto',
+		url: window.location.pathname + '/photo',
 		data: formData, 
 		cache: false, 
 		contentType: false, 
@@ -122,7 +122,7 @@ export function clear_photo() {
 	//удаляем фото с сервера
 	let photo_uuid = photo_load_widget.getAttribute('value');
 	$.ajax({
-		url: '/storage/delete/' + photo_uuid, 
+		url: window.location.pathname + '/photo/' + photo_uuid, 
 		method: 'DELETE',
 		dataType: 'json',
 		success: (data) => {
