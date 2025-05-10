@@ -41,11 +41,6 @@ public class ClientProfileServiceImpl implements ClientProfileService {
 	@Override
 	public ClientProfile updateProfile(ClientProfile profile, ClientProfileDto profileDto) {
 		
-		//объект анкеты, готовый к сохранению
-		ClientProfile mappedProfile = mapper.toClientProfile(profileDto);
-		
-		this.updateProfileData(profile, mappedProfile);
-		
 		return null;
 	}
 	

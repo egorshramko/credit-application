@@ -19,7 +19,7 @@ export function file_uploaded(event) {
 
 		//загружаем файл на сервер
 		$.ajax({
-			url: '/storage/upload',
+			url: window.location.pathname + '/addPhoto',
 			data: form_data,
 			cache: false, 
 			contentType: false, 

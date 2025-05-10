@@ -3,11 +3,13 @@ package com.example.credit.web.api.dto.profile;
 import java.util.List;
 import java.util.ArrayList;
 import lombok.Data;
+import lombok.Builder;
 
 @Data
+@Builder
 public class ClientProfileDto {
 	
-	private Long id;
+	private String id;
 	private String lastname;
 	private String firstname;
 	private String middlename;

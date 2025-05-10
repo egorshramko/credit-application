@@ -21,14 +21,15 @@ export function selectFileHandler(event) {
 	data.append("file", lastUploadedFile);
 	
 	$.ajax({
-		url: '/storage/upload',
+		url: window.location.pathname + '/scan',
 		data: data,
 		cache: false, 
-		contentType: false, 
+		contentType: false,
+		dataType: 'json', 
 		processData: false, 
 		method: 'POST',
 		success: (data) => {
-			showAddedScan(data, lastUploadedFile.name);
+			showAddedScan(data.id, lastUploadedFile.name);
 		}
 	});
 	
@@ -108,7 +109,7 @@ function removeScan(controlId) {
 	let storageUUID = scanControl.getAttribute('value');
 	
 	$.ajax({
-		url: '/storage/delete/' + storageUUID,
+		url: window.location.pathname + '/scan/' + storageUUID,
 		method: 'DELETE',
 		dataType: 'json',
 		success: (data) => {

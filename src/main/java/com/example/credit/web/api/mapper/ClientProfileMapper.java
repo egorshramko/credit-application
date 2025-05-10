@@ -1,59 +1,34 @@
 package com.example.credit.web.api.mapper;
 
-import com.example.credit.data.Contact;
 import com.example.credit.data.ClientProfile;
-import com.example.credit.data.enums.Sex;
 import com.example.credit.web.api.dto.profile.ClientProfileDto;
-import com.example.credit.web.api.dto.profile.ContactDto;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 
 @Slf4j
 @Component
 public class ClientProfileMapper {
 	
-	@Autowired
-	private ContactMapper contactMapper;
-	
-	@Autowired
-	private PassportMapper passportMapper;
-	
-	@Autowired
-	private BinaryContentMapper binaryContentMapper;
-	
-	public ClientProfile toClientProfile(ClientProfileDto profileDto) {
+	public ClientProfileDto toDTO(ClientProfile profile) {
 		
-		List<Contact> contactsList = new ArrayList<>();
+		//если в анкете содержится фотография, то ее необходимо 
 		
-		if (profileDto.getContacts() != null && profileDto.getContacts().size() > 0) {
-			for (ContactDto contactDto : profileDto.getContacts()) {
-				contactsList.add(
-						contactMapper.toContact(contactDto)
-					);
-			}
-		}
-		
-		
-		return ClientProfile.builder()
-				.lastname(profileDto.getLastname())
-				.firstname(profileDto.getFirstname())
-				.middlename(profileDto.getMiddlename())
-				.birthdate(LocalDate.parse(profileDto.getBirthdate()))
-				.citizenship(profileDto.getCitizenship())
-				.sex(Sex.valueOf(profileDto.getSex()))
-				.photo(binaryContentMapper.toBinaryContent(profileDto.getPhoto()))
-				.passport(passportMapper.toPassport(profileDto.getPassport()))
-				.contacts(contactsList)
-				.tin(profileDto.getTin())
-				.comment(profileDto.getComment())
-				.consentPersonalData(profileDto.getConsentPersonalData())
+		return ClientProfileDto.builder()
+				.id(Optional.ofNullable(profile.getId()).orElse(null).toString())
+				.lastname(profile.getLastname())
+				.firstname(profile.getFirstname())
+				.middlename(profile.getMiddlename())
+				.birthdate(Optional.ofNullable(profile.getBirthdate()).orElse(null).toString())
+				.citizenship(profile.getCitizenship())
+				.sex(Optional.ofNullable(profile.getSex()).orElse(null).toString())
+				.tin(profile.getTin())
+				.comment(profile.getComment())
+				.consentPersonalData(profile.getConsentPersonalData())
 				.build();
 	}
 	

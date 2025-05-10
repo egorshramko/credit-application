@@ -93,7 +93,7 @@ async function sendPhoto(url) {
 		.then(response => response.blob());
 	formData.append("file", new File([photoBlob], 'avatar.png'));
 	$.ajax({
-		url: '/storage/upload',
+		url: window.location.pathname + '/addPhoto',
 		data: formData, 
 		cache: false, 
 		contentType: false, 

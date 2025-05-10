@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -70,5 +71,21 @@ public class ClientProfile {
 
 	@OneToOne
 	private BinaryContent photo;
+	
+	public void addContact(Contact contact) {
+		contacts.add(contact);
+	}
+	
+	public boolean removeContact(UUID contactUUID) {
+		Contact contactForRemove = contacts.stream()
+									.filter(contact -> contact.getUuid().equals(contactUUID))
+									.findFirst()
+									.orElse(null);
+		
+		if (contactForRemove != null) {
+			return contacts.remove(contactForRemove);
+		}
+		return false;
+	}
 
 }
