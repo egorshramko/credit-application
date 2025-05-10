@@ -217,34 +217,77 @@ public class ProfileController {
 		
 	}
 	
-	@DeleteMapping("/photo")
+	/**
+	 * Метод удаляет фотографию из анкеты, хранящейся в пользовательской сессии, 
+	 * и из файловое хранилища по переданному в пути запроса идентификатору.
+	 * 
+	 * @param session - объект текущей пользовательской сессии
+	 * @param photoId - переданный идентификатор фотографии
+	 * 
+	 * @return
+	 * Объект HTTP-объекта:
+	 * Код 200 в случае успешного удаления фотографии.
+	 * Код 404 в случае передачи некорректного идентификатора.
+	 * Код 500 в иных случаях.
+	 */
+	@DeleteMapping("/photo/{photoUUID}")
 	@ResponseBody
 	public ResponseEntity<?> removePhotoFromProfile(HttpSession session, 
-													@RequestBody BinaryContentDto dto) {
+													@PathVariable("photoUUID") String photoId) {
 		
-		Object profileObj = session.getAttribute("profile");
+		log.info("Request for removing profile photo");
+		log.info("Requested to remove photo UUID: " + photoId);
 		
-		if (profileObj instanceof ClientProfile) {
-			
-			ClientProfile profile = (ClientProfile) profileObj;
-			log.info("profile id: " + profile.getId());
-			
-			BinaryContent photo = Optional.ofNullable(profile.getPhoto()).orElse(null);
-			if (photo.getUuid().equals(UUID.fromString(dto.getUuid()))) {
-				log.info("remove photo from profile");
-				
-				
-				try {
-					tempStorageService.remove(photo.getUuid());
-				}
-				catch (IOException exception) {
-					log.error("This photo is not exists!");
-				}
-				
-			}
+		//получение объекта анкеты из сессии
+		ClientProfile profile = this.getProfileFromSession(session);
+		UUID photoUUID = UUID.fromString(photoId);
+		if (profile == null) {
+					
+			log.error("Profile is not exist in this session");
+			log.error("session id: " + session.getId());
+					
+			return ResponseEntity.internalServerError().build();
 		}
 		
-		return ResponseEntity.internalServerError().build();
+		//проверка корректности переданного идентификатора
+		BinaryContent profilePhoto = profile.getPhoto();
+		if (profilePhoto == null || !profilePhoto.getUuid().equals(photoUUID)) {
+			log.error("Invalid photo UUID");
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(Json.createObjectBuilder()
+							.add("message", "Invalid photo UUID")
+							.build()
+							.toString());
+		}
+		
+		//удаление файла из хранилища и анкеты
+		try {
+			
+			boolean photoRemoved = tempStorageService.remove(photoUUID);
+			if (photoRemoved) {
+				profile.setPhoto(null);
+				
+				log.info("Photo removed successfully");
+			}
+			
+			return ResponseEntity.ok()
+					.body(Json.createObjectBuilder()
+							.add("removed", photoRemoved)
+							.build()
+							.toString());
+			
+		}
+		catch (IOException ioException) {
+			log.error(ioException.getMessage());
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(Json.createObjectBuilder()
+							.add("message", ioException.getMessage())
+							.build()
+							.toString());
+		}
+		
 		
 	}
 	
