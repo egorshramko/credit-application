@@ -153,7 +153,7 @@ async function downloadScan(controlId) {
 	let filename;
 	
 	try {
-		const response = await fetch('/storage/download/' + storageUUID)
+		const response = await fetch(window.location.pathname + '/scan/' + storageUUID)
 				.then((response) => {
 					if (!response.ok) throw new Error("Download response was not ok");
 					filename = response.headers.get('Content-Disposition')
