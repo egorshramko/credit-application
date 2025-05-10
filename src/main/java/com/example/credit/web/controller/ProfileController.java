@@ -159,34 +159,62 @@ public class ProfileController {
 				.build();
 	}
 	
+	/**
+	 * Метод загружает фотографию анкеты в файловое хранилище и привязывает
+	 * ее к объекту анкеты, хранящемуся в пользовательской сессии.
+	 * 
+	 * @param session - объект текущей пользовательской сессии
+	 * @param file - загружаемый клиентом файл
+	 * 
+	 * @return
+	 * Объект HTTP-ответа:
+	 * Код 200 в случае успешной загрузки файла. 
+	 * В теле успешного ответа содержится json 
+	 * 	с UUID фотографии во временном хранилище, по которому можно получить 
+	 *  доступ к фотографии.
+	 * Код 500 без тела в случае неуспешной загрузки файла.
+	 */
 	@PostMapping("/photo")
 	@ResponseBody
 	public ResponseEntity<?> addPhotoToProfile(HttpSession session, 
 			@RequestParam(value = "file", required = false) @Valid final MultipartFile file) {
 		
-		Object profileObj = session.getAttribute("profile");
+		log.info("Request for adding photo to profile");
 		
-		if (profileObj instanceof ClientProfile) {
+		//получение объекта анкеты из сессии
+		ClientProfile profile = this.getProfileFromSession(session);
+		if (profile == null) {
 			
-			ClientProfile profile = (ClientProfile) profileObj;
+			log.error("Profile is not exist in this session");
+			log.error("session id: " + session.getId());
 			
-			try {
-				UUID photoUUID = tempStorageService.upload(file);
-				profile.setPhoto(BinaryContent.builder()
-									.uuid(photoUUID)
-									.build());
-				
-				return ResponseEntity.ok(photoUUID.toString());
-				
-			}
-			catch (IOException exception) {
-				return ResponseEntity.badRequest().build();
-			}
-			
+			return ResponseEntity.internalServerError().build();
 		}
 		
-		return ResponseEntity.internalServerError()
-				.build();
+		//загрузка файла и привязка к анкете
+		try {
+			UUID photoUUID = tempStorageService.upload(file);
+			profile.setPhoto(BinaryContent.builder()
+									.uuid(photoUUID)
+									.build());
+			
+			log.info("Photo uploaded successfully");
+			log.info("Photo id in temp file storage: " + photoUUID.toString());
+			
+			return ResponseEntity.ok()
+					.body(Json.createObjectBuilder()
+							.add("id", photoUUID.toString())
+							.build()
+							.toString());
+			
+			
+		}
+		catch (IOException ioException) {
+			log.error(ioException.getMessage());
+			
+			return ResponseEntity.internalServerError().build();
+		}
+		
 	}
 	
 	@DeleteMapping("/photo")
