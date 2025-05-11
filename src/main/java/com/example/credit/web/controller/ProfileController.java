@@ -136,37 +136,49 @@ public class ProfileController {
 		
 	}
 	
+	/**
+	 * Метод удаления контакта из анкеты по его идентификатору
+	 * 
+	 * @param session - объект текущей пользовательской сессии
+	 * @param contactUUIDString - идентификатор удаляемого контакта
+	 * @return
+	 * Объект HTTP-ответа:
+	 * Код 200 без тела ответа в случае успешного удаления,
+	 * Код 404 с сообщением об ошибке в теле в случае передачи 
+	 * некорректного идентификатора,
+	 * Код 500 в случае отсутствия анкеты в сессии и прочих ошибок сервера
+	 */
 	@DeleteMapping("/contact/{contactId}")
 	@ResponseBody
 	public ResponseEntity<String> removeContactFromProfile(HttpSession session,
-			@PathVariable("contactId") String contactUUID) {
+			@PathVariable("contactId") String contactUUIDString) {
 		
-		Object profileObj = session.getAttribute("profile");
+		log.info("Request to remove contact from profile");
+		log.info("Removing contact UUID: " + contactUUIDString);
 		
-		if (profileObj instanceof ClientProfile) {
-			ClientProfile profile = (ClientProfile) profileObj;
+		//получение объекта анкеты из пользовательской сессии
+		ClientProfile profile = this.getProfileFromSession(session);
+		UUID contactUUID = UUID.fromString(contactUUIDString);
+		if (profile == null) {
+			log.error("Profile is not exist in this session");
+			log.error("session id: " + session.getId());
 			
-			log.info("profile id: " + profile.getId().toString());
-			log.info("contacts.size: " + Integer.toString(profile.getContacts().size()));
-			
-			UUID removedContactUUID = UUID.fromString(contactUUID);
-			if (profile.removeContact(removedContactUUID)) {
-				
-				log.info("contact removed");
-				log.info("contacts.size: " + Integer.toString(profile.getContacts().size()));
-				
-				return ResponseEntity.ok()
-						.build();
-			}
-			
-			log.warn("incorrect contact UUID!");
-			log.info("contacts.size: " + Integer.toString(profile.getContacts().size()));
-			return ResponseEntity.notFound()
-					.build();
+			return ResponseEntity.internalServerError().build();
 		}
 		
-		return ResponseEntity.internalServerError()
-				.build();
+		if (profile.removeContact(contactUUID)) {
+			log.info("Contact removed successfully");
+			
+			return ResponseEntity.ok().build();
+		}
+		
+		log.warn("Invalid contact UUID");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(Json.createObjectBuilder()
+						.add("message", "Invalid contact UUID")
+						.build()
+						.toString());
+		
 	}
 	
 	/**
