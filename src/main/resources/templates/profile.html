@@ -318,7 +318,8 @@
                             			</div>
                             		</div>
                             		<div class="col-1 d-flex align-items-end justify-content-center py-1">
-                            			<button th:id="${'contact-remove-' + ctIndex.index}" class="btn btn-sm btn-outline-danger link-button"
+                            			<button th:id="${'contact-remove-' + ctIndex.index}" 
+                            				class="btn btn-sm btn-outline-danger link-button remove-contact-btn"
                             				type="button">
                             				
                             				<span class="bi bi-trash3"></span>	
@@ -403,6 +404,7 @@
         	
         	
         	/*]]>*/
+        	
         </script>
         <script type="module" th:src="@{/static/js/widget.contacts.repeater/widget.contacts.repeater.js}"></script>
 

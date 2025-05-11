@@ -1,6 +1,12 @@
 $("#add-contact-button").on('click', addContact);
 $(".phone-input").click().mask("+7 (999) 999-99-99");
 
+//привязка обработчика удаления к существующим контактам 
+let removeContactButtons = document.querySelectorAll('.remove-contact-btn');
+removeContactButtons.forEach((button) => {
+	button.addEventListener('click', removeContactButtonHandler);
+});
+
 //функция показа уведомления об ошибке (вообще когда-нибудь я это вытащу в отдельный файл)
 function showErrorAlert(message) {
 	
