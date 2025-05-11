@@ -98,32 +98,42 @@ public class ProfileController {
 
 	}
 	
+	/**
+	 * Метод добавляет в коллекцию контактов анкеты новый объект
+	 * контакта с идентификатором, по которому можно получить доступ
+	 * до него из клиентского приложения.
+	 * 
+	 * @param session - объект текущей пользовательской сессии
+	 * @return
+	 * Объект HTTP-ответа:
+	 * Код 200 в случае успешного создания и добавления контакта.
+	 * Код 500 в ином случае.
+	 */
 	@PostMapping("/contact")
 	@ResponseBody
 	public ResponseEntity<String> addContactToProfile(HttpSession session) {
 		
-		Object profileObj = session.getAttribute("profile");
+		log.info("Request for adding contact to profile");
 		
-		if (profileObj instanceof ClientProfile) {
-			ClientProfile profile = (ClientProfile) profileObj;
+		ClientProfile profile = this.getProfileFromSession(session);
+		if (profile == null) {
+			log.error("Profile is not exist in this session");
+			log.error("session id: " + session.getId());
 			
-			UUID newContactUUID = UUID.randomUUID();
-			
-			profile.addContact(Contact.builder()
-								.uuid(newContactUUID)
-								.build());
-			
-			session.setAttribute("profile", profile);
-			
-			return ResponseEntity.ok()
-					.body(Json.createObjectBuilder()
-							.add("id", newContactUUID.toString())
-							.build()
-							.toString());
+			return ResponseEntity.internalServerError().build();
 		}
 		
-		return ResponseEntity.internalServerError()
-				.build();
+		UUID newContactUUID = UUID.randomUUID();
+		profile.addContact(Contact.builder()
+								.uuid(newContactUUID)
+								.build());
+		
+		return ResponseEntity.ok()
+				.body(Json.createObjectBuilder()
+						.add("id", newContactUUID.toString())
+						.build()
+						.toString());
+		
 	}
 	
 	@DeleteMapping("/contact/{contactId}")
