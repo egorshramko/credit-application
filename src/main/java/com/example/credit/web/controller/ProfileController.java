@@ -144,6 +144,7 @@ public class ProfileController {
 		
 		UUID newContactUUID = UUID.randomUUID();
 		profile.addContact(Contact.builder()
+								.contactType(ContactType.HOME) //статус способа связи по умолчанию
 								.uuid(newContactUUID)
 								.build());
 		
