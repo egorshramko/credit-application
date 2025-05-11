@@ -27,7 +27,7 @@ async function addContact() {
 	contactContainer.classList.add('contact-element');
 	
 	//вызов api для добавления контакта
-	let addContactResponse = await fetch(window.location.pathname + '/addContact', {
+	let addContactResponse = await fetch(window.location.pathname + '/contact', {
 		method: 'POST'
 	});
 	
@@ -196,15 +196,8 @@ async function removeContactButtonHandler(event) {
 	let contactContainerUUID = contactContainer.getAttribute('value');
 	console.log("contact container value: " + contactContainerUUID);
 	
-	let requestBody = {
-		uuid: contactContainerUUID
-	};
-	let contactRemoveResponse = await fetch(window.location.pathname + '/removeContact', {
-		method: 'DELETE',
-		headers: {
-			'Content-Type': 'application/json;charset=utf-8'
-		},
-		body: JSON.stringify(requestBody)
+	let contactRemoveResponse = await fetch(window.location.pathname + '/contact/' + contactContainerUUID, {
+		method: 'DELETE'
 	});
 	
 	if (contactRemoveResponse.ok) {
