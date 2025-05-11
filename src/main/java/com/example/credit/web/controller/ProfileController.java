@@ -88,11 +88,30 @@ public class ProfileController {
 		
 	}
 	
+	@ModelAttribute
+	public void addProfileToModel(@PathVariable("id") String creditId, 
+			HttpSession session, 
+			Model model) {
+		
+		//загрузка анкеты из кредита
+		Credit credit = creditService.getCreditById(creditId);
+		ClientProfile profileFromCredit = 
+				Optional.ofNullable(credit.getProfile())
+				.orElse(new ClientProfile());
+		
+		//проверка наличия запрошенной анкеты в сессии
+		ClientProfile profileFromSession = this.getProfileFromSession(session);
+		if (profileFromSession == null 
+				|| !profileFromCredit.getId()
+					.equals(profileFromSession.getId())) {
+			
+			model.addAttribute("profile", profileFromCredit);
+			
+		}
+	}
+	
 	@GetMapping
 	public String getProfilePage(@PathVariable("id") String creditId, Model model) {
-		
-		Credit credit = creditService.getCreditById(creditId);
-		model.addAttribute("profile", Optional.ofNullable(credit.getProfile()).orElse(new ClientProfile()));
 		
 		return "profile";
 
