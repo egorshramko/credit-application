@@ -258,7 +258,7 @@
                                             
                                             <div th:each="scan : *{passport.scans}" 
                                                 th:id="${'passport-scan-' + scan.id}" 
-                                                th:value="${scan.id}"
+                                                th:value="${scan.scanFile.uuid.toString()}"
                                                 class="col-12 form-control d-flex justify-content-between scan-element"
                                             >
 
