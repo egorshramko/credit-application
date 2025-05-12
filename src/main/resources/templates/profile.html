@@ -259,7 +259,7 @@
                                             <div th:each="scan, scanIndex : *{passport.scans}" 
                                                 th:id="${'passport-scan-' + scanIndex.index}" 
                                                 th:value="${scan.scanFile.uuid?.toString()}"
-                                                class="col-12 form-control d-flex justify-content-between scan-element"
+                                                class="col-12 form-control d-flex justify-content-between scan-element mb-2"
                                             >
 
                                                 <input th:id="${'scan-control-' + scanIndex.index}" th:files="${scan.scanFile.content}" class="d-none" />
