@@ -101,7 +101,7 @@ function showAddedScan(scanFileUUID, fileName) {
 	
 }
 
-function removeScan(controlId) {
+export function removeScan(controlId) {
 	console.log("Кликнули на удаление файла");
 	console.log("controlId: " + controlId);
 	
@@ -144,7 +144,7 @@ function downloadFile(url, filename) {
 	document.body.removeChild(a);
 }
 
-async function downloadScan(controlId) {
+export async function downloadScan(controlId) {
 	console.log("Кликнули на скачивание файла");
 	console.log("controlId: " + controlId);
 	

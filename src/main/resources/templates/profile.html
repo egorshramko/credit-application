@@ -256,21 +256,21 @@
                                         <input id="scans-control" type="file" accept=".jpg, .png, .jpeg" class="d-none" />
                                         <div id="scans-collection-container" class="scans-collection-widget row m-0">
                                             
-                                            <div th:each="scan : *{passport.scans}" 
-                                                th:id="${'passport-scan-' + scan.id}" 
+                                            <div th:each="scan, scanIndex : *{passport.scans}" 
+                                                th:id="${'passport-scan-' + scanIndex.index}" 
                                                 th:value="${scan.scanFile.uuid?.toString()}"
                                                 class="col-12 form-control d-flex justify-content-between scan-element"
                                             >
 
-                                                <input th:id="${'scan-control-' + scan.id}" th:files="${scan.scanFile.content}" class="d-none" />
+                                                <input th:id="${'scan-control-' + scanIndex.index}" th:files="${scan.scanFile.content}" class="d-none" />
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <span class="p-0" th:text="${scan.scanFile.name}">File name</span>
                                                 </div>
                                                 <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary mx-1">
+                                                    <button type="button" th:for="${'passport-scan-' + scanIndex.index}" class="btn btn-sm btn-outline-secondary mx-1 scan-download-btn">
                                                         <span class="bi bi-download"></span>
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger">
+                                                    <button type="button" th:for="${'passport-scan-' + scanIndex.index}" class="btn btn-sm btn-outline-danger scan-remove-btn">
                                                         <span class="bi bi-trash3"></span>
                                                     </button>
                                                 </div>
