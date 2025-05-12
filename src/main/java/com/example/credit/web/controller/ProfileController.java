@@ -237,6 +237,7 @@ public class ProfileController {
 		try {
 			UUID photoUUID = tempStorageService.upload(file);
 			profile.setPhoto(BinaryContent.builder()
+									.content(tempStorageService.download(photoUUID).toFile())
 									.uuid(photoUUID)
 									.build());
 			
@@ -256,6 +257,60 @@ public class ProfileController {
 			
 			return ResponseEntity.internalServerError().build();
 		}
+		
+	}
+	
+	/**
+	 * Метод, возвращающий фотографию профиля клиенту
+	 * 
+	 * @param session - объект текущей сессии
+	 * @return
+	 * HTTP-ответ с фотографией
+	 */
+	@GetMapping("/photo")
+	public ResponseEntity<?> getProfilePhoto(HttpSession session) {
+		
+		log.info("Request to get profile photo");
+		
+		ClientProfile profile = this.getProfileFromSession(session);
+		if (profile == null) {
+			log.error("Profile is not exist in this session");
+			log.error("session id: " + session.getId());
+					
+			return ResponseEntity.internalServerError().build();
+		}
+		
+		BinaryContent photo = profile.getPhoto();
+		if (photo != null) {
+			
+			try {
+				Path photoPath = tempStorageService.download(photo.getUuid());
+				Resource fileResource = new FileSystemResource(photoPath);
+				
+				HttpHeaders responseHeaders = new HttpHeaders();
+				responseHeaders.add(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" +
+								tempStorageService.getFileNameById(photo.getUuid()));
+				
+				return ResponseEntity.ok()
+						.headers(responseHeaders)
+						.contentLength(photoPath.toFile().length())
+						.contentType(MediaType.APPLICATION_OCTET_STREAM)
+						.body(fileResource);
+			}
+			catch (IOException ioException) {
+				log.error(ioException.toString());
+				
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(Json.createObjectBuilder()
+								.add("message", ioException.getMessage())
+								.build()
+								.toString());
+			}
+			
+		}
+		
+		return ResponseEntity.notFound().build();
 		
 	}
 	

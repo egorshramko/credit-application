@@ -127,13 +127,13 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div id="photo-load-widget-container" class="photo-load-widget-container">
-                                        <div id="photo-load-widget" class="loaded-photo-container container d-flex justify-content-center">
+                                        <div id="photo-load-widget" th:value="*{photo != null && photo.uuid != null} ? *{photo.uuid.toString()}" th:class="'loaded-photo-container container d-flex justify-content-center ' + (*{photo != null} ? 'photo-uploaded')">
                                             <div class="clear-photo-btn-container">
                                                 <button id="clear-photo-btn" class="clear-photo-btn btn btn-danger photo-widget-control hide-photo-widget-control" type="button">
                                                     <span class="bi bi-trash3"></span>
                                                 </button>
                                             </div>
-                                            <img id="loaded-photo" th:src="@{/static/assets/profile/empty_avatar.png}" alt="Аватар" class="loaded-photo rounded"/>
+                                            <img id="loaded-photo" th:src="*{photo?.content == null} ? @{/static/assets/profile/empty_avatar.png} : @{profile/photo}" alt="Аватар" class="loaded-photo rounded"/>
                                             <input id="file-photo-input" type="file" accept=".jpg, .png, .jpeg" class="d-none">
                                         </div>
                                         <div class="photo-widget-buttons">
