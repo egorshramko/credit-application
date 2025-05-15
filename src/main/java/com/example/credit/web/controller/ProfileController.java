@@ -117,6 +117,19 @@ public class ProfileController {
 
 	}
 	
+	@PostMapping
+	@ResponseBody
+	public String fillProfile(@PathVariable("id") String creditId, Model model) {
+		try {
+			Thread.sleep(3000);
+		}
+		catch (InterruptedException interruptedException) {
+			
+		}
+		
+		return "test";
+	}
+	
 	/**
 	 * Метод добавляет в коллекцию контактов анкеты новый объект
 	 * контакта с идентификатором, по которому можно получить доступ

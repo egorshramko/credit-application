@@ -301,7 +301,7 @@ async function sendProfileHandler(event) {
 async function sendFormDataJson(formDataJson) {
 	console.log("Отправка запроса на сервер");
 	
-	let response = await fetch('/api' + window.location.pathname + '/verificate', {
+	let response = await fetch(window.location.pathname, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json;charset=utf-8'
