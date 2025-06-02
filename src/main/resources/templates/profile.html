@@ -396,10 +396,19 @@
             	data-bs-backdrop="static" data-bs-keyboard="false" 
             	tabindex="-1" aria-hidden="true">
             	
-            	<div class="modal-dialog">
+            	<div class="modal-dialog modal-dialog-centered">
             		<div class="modal-content">
             			<div class="modal-body">
-            				<p>Пожалуйста, подождите</p>
+            				<div class="row">
+            					<div class="col-1">
+            						<div class="spinner-border text-secondary" role="status">
+		            					<span class="visually-hidden">Пожалуйста, подождите</span>
+		            				</div>
+            					</div>
+            					<div class="col-11 d-flex justify-content-center align-items-center">
+            						<span id="please-wait-message">Анкета обрабатывается. Пожалуйста, подождите...</span>
+            					</div>
+            				</div>
             			</div>
             		</div>
             	</div>
