@@ -286,7 +286,17 @@ async function sendProfileHandler(event) {
 		let formDataJson = mapFormData();
 		console.log(formDataJson);
 		
-		await sendFormDataJson(formDataJson);
+		await $("#please-wait-dialog").modal('show');
+		
+		//раскомменчу, когда разберусь с модальным окошком
+		sendFormDataJson(formDataJson)
+			.then(() => {
+				$("#please-wait-dialog").modal('hide');
+			})
+			.catch(() => {
+				$("#please-wait-dialog").modal('hide');
+			});
+		
 	}
 	else {
 		console.log("Некоторые обязательные поля не заполнены");

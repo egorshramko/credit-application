@@ -28,6 +28,9 @@
     		</symbol>
     	</svg>
     	<div id="error-alert-container"></div>
+    	<div id="waiting-modal-container">
+    		
+    	</div>
         <div class="container my-3">
             <a id="return-index-link" href="/" onclick="event.preventDefault();">Вернуться на главную</a>
         </div>
@@ -388,7 +391,19 @@
             	<div class="col-6 d-flex justify-content-end">
             		<button id="refuse-btn" class="btn btn-danger">Отказаться от оформления</button>
             	</div>
-            		
+            </div>
+            <div class="modal fade" id="please-wait-dialog" 
+            	data-bs-backdrop="static" data-bs-keyboard="false" 
+            	tabindex="-1" aria-hidden="true">
+            	
+            	<div class="modal-dialog">
+            		<div class="modal-content">
+            			<div class="modal-body">
+            				<p>Пожалуйста, подождите</p>
+            			</div>
+            		</div>
+            	</div>
+            	
             </div>
         </div>
 
