@@ -85,9 +85,12 @@ public class ClientProfileMapper {
 			
 		}
 		
-		profile.setPhoto(
-				binaryContentMapper
-						.toBinaryContent(profileDto.getPhoto()));
+		if (profileDto.getPhoto() != null) {
+			profile.setPhoto(
+					binaryContentMapper
+							.toBinaryContent(profileDto.getPhoto()));
+		}
+		
 		
 		
 		return profile;

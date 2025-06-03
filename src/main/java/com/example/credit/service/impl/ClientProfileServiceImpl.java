@@ -7,12 +7,17 @@ import jakarta.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.credit.check.data.CheckResult;
+import com.example.credit.check.data.enums.ResultType;
+import com.example.credit.check.service.CheckService;
 import com.example.credit.data.ClientProfile;
 import com.example.credit.data.Passport;
 import com.example.credit.service.ClientProfileService;
 import com.example.credit.web.api.dto.profile.ClientProfileDto;
 import com.example.credit.web.api.mapper.ClientProfileMapper;
 import com.example.credit.data.repository.ClientProfileRepository;
+import com.example.credit.data.repository.PassportRepository;
+import com.example.credit.data.repository.PassportScanRepository;
 import com.example.credit.storage.service.TempStorageService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +30,13 @@ public class ClientProfileServiceImpl implements ClientProfileService {
 	private ClientProfileRepository clientProfileRepository;
 	
 	@Autowired
-	private TempStorageService tempStorage;
+	private PassportRepository passportRepository;
 	
 	@Autowired
-	private ClientProfileMapper mapper;
+	private PassportScanRepository passportScanRepository;
 	
 	@Autowired
-	private EntityManager jpaEntityManager;
+	private CheckService checkService;
 	
 	/*
 	 * Метод обновления данных анкеты в соответствии с пришедшей от клиента формой
@@ -39,30 +44,33 @@ public class ClientProfileServiceImpl implements ClientProfileService {
 	 * @param profileDto - данные пришедшей формы
 	 */
 	@Override
-	public ClientProfile updateProfile(ClientProfile profile, ClientProfileDto profileDto) {
+	public ClientProfile updateProfile(ClientProfile profile) {
 		
-		return null;
+		passportRepository.save(profile.getPassport());
+		clientProfileRepository.save(profile);
+		
+		return profile;
 	}
 	
-	private void updateProfileData(ClientProfile existProfile, ClientProfile otherProfile) {
+	@Override
+	public Iterable<CheckResult> checkAndUpdateProfile(ClientProfile clientProfile) {
+		Iterable<CheckResult> checkResults = checkService.checkProfile(clientProfile);
 		
-		existProfile.setLastname(otherProfile.getLastname());
-		existProfile.setFirstname(otherProfile.getFirstname());
-		existProfile.setMiddlename(otherProfile.getMiddlename());
-		existProfile.setBirthdate(otherProfile.getBirthdate());
-		existProfile.setCitizenship(otherProfile.getCitizenship());
-		existProfile.setSex(otherProfile.getSex());
+		//проверка, что все проверки пройдены
+		int rejectedChecks = 0;
+		for (CheckResult checkResult : checkResults) {
+			if (checkResult.getResultType() == ResultType.REJECTED) {
+				rejectedChecks++;
+			}
+		}
 		
+		if (rejectedChecks == 0) {
+			this.updateProfile(clientProfile);
+		}
 		
-		
-		Passport existPassport = existProfile.getPassport();
-		existPassport.setSeries(otherProfile.getPassport().getSeries());
-		existPassport.setNumber(otherProfile.getPassport().getNumber());
-		existPassport.setIssueDate(otherProfile.getPassport().getIssueDate());
-		existPassport.setDepartmentCode(otherProfile.getPassport().getDepartmentCode());
-		existPassport.setIssuePlace(otherProfile.getPassport().getIssuePlace());
-		
+		return checkResults;
 	}
+
 	
 	
 

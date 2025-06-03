@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,20 +30,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.credit.check.data.CheckResult;
 import com.example.credit.data.BinaryContent;
 import com.example.credit.data.ClientProfile;
 import com.example.credit.data.Contact;
 import com.example.credit.data.Credit;
 import com.example.credit.data.enums.ContactType;
 import com.example.credit.data.enums.Sex;
+import com.example.credit.service.ClientProfileService;
 import com.example.credit.service.CreditService;
 import com.example.credit.service.TempProfileService;
 import com.example.credit.storage.service.TempStorageService;
 import com.example.credit.web.api.dto.BinaryContentDto;
+import com.example.credit.web.api.dto.profile.ClientProfileDto;
 import com.example.credit.web.api.dto.profile.ContactDto;
+import com.example.credit.web.api.mapper.ClientProfileMapper;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +67,12 @@ public class ProfileController {
 	
 	@Autowired
 	private TempProfileService tempProfileService;
+	
+	@Autowired
+	private ClientProfileService clientProfileService;
+	
+	@Autowired
+	private ClientProfileMapper clientProfileMapper;
 	
 	@ModelAttribute("sex")
 	public Sex[] addSexEnumToModel(Model model) {
@@ -119,12 +131,20 @@ public class ProfileController {
 	
 	@PostMapping
 	@ResponseBody
-	public String fillProfile(@PathVariable("id") String creditId, Model model,
+	public ResponseEntity<?> fillProfile(@PathVariable("id") String creditId, 
+			@RequestBody ClientProfileDto profileDto,
+			Model model,
 			HttpSession session) {
 		
+		log.info("Getting profile from session");
 		ClientProfile profile = this.getProfileFromSession(session);
 		
-		return "test";
+		profile = clientProfileMapper.updateProfileFromDto(profile, profileDto);
+		
+		Iterable<CheckResult> checkResults = clientProfileService.checkAndUpdateProfile(profile);
+		
+		return ResponseEntity.ok()
+				.body(checkResults);
 	}
 	
 	/**
