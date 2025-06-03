@@ -47,19 +47,21 @@ public class AgeCheck implements Check {
 				checkResult.setResultType(ResultType.REJECTED);
 			}
 			break;
-		
+		default:
+			throw new RuntimeException("Incorrect sex in profile");
 		}
 		
 		if (checkResult.getResultType() == ResultType.REJECTED) {
 			if (age < 18) {
 				checkResult.setMessage("Underage client");
-			}
+			} 
 			else {
 				checkResult.setMessage("Retirement age client");
 			}
 		}
 		
 		return checkResult;
+		
 	}
 
 }
