@@ -292,18 +292,8 @@ async function sendProfileHandler(event) {
 		sendFormDataJson(formDataJson)
 			.then(() => {
 				
-				let pleaseWaitMessage = document.getElementById('please-wait-message');
-				pleaseWaitMessage.innerText = "Анкета обработана. Перенаправление на заполнение заявки...";
-				//$("#please-wait-message").text("Анкета обработана. Перенаправление на заполнение заявки...");
-				
-				setTimeout(() => {}, 2000);
-				
-				//так ли оно надо????
-				//$("#please-wait-message").text("Анкета обрабатывается. Пожалуйста, подождите...");
-				
-			})
-			.then(() => {
 				$("#please-wait-dialog").modal('hide');
+				
 			})
 			.catch(() => {
 				$("#please-wait-dialog").modal('hide');

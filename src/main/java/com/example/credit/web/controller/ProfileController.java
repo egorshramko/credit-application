@@ -119,13 +119,10 @@ public class ProfileController {
 	
 	@PostMapping
 	@ResponseBody
-	public String fillProfile(@PathVariable("id") String creditId, Model model) {
-		try {
-			Thread.sleep(3000);
-		}
-		catch (InterruptedException interruptedException) {
-			
-		}
+	public String fillProfile(@PathVariable("id") String creditId, Model model,
+			HttpSession session) {
+		
+		ClientProfile profile = this.getProfileFromSession(session);
 		
 		return "test";
 	}
