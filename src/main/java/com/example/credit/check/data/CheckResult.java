@@ -7,6 +7,7 @@ import com.example.credit.check.data.enums.ResultType;
 public class CheckResult {
 	
 	private ResultType resultType;
+	private String checkName;
 	private String message;
 	
 }
