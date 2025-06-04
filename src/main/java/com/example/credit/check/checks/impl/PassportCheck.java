@@ -9,6 +9,9 @@ import com.example.credit.check.data.enums.ResultType;
 import com.example.credit.data.ClientProfile;
 import com.example.credit.data.Passport;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class PassportCheck implements Check {
 	
 	private ClientProfile profile;
@@ -20,14 +23,21 @@ public class PassportCheck implements Check {
 	@Override
 	public CheckResult check() {
 		
+		log.info("Passport check");
+		
 		Passport passport = profile.getPassport();
 		LocalDate issueDate = passport.getIssueDate();
 		
 		LocalDate birthDate = profile.getBirthdate();
 		
+		log.info("Passport issue date: " + issueDate.toString());
+		log.info("Client birthdate: " + birthDate.toString());
+		
 		//вычисление возраста клиента
 		int age = Period.between(birthDate, LocalDate.now())
 							.getYears();
+		
+		log.info("Client age: " + String.valueOf(age));
 		
 		CheckResult checkResult = new CheckResult();
 		checkResult.setCheckName("Passport check");
@@ -62,6 +72,7 @@ public class PassportCheck implements Check {
 					correctEndDate == null) {
 				
 				checkResult.setResultType(ResultType.APPROVED);
+				log.info("Check approved");
 				
 			}
 			else {
@@ -70,6 +81,7 @@ public class PassportCheck implements Check {
 			
 		}
 		else {
+			log.info("Check rejected");
 			checkResult.setResultType(ResultType.REJECTED);
 			checkResult.setMessage("Passport is expired");
 		}
