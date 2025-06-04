@@ -272,6 +272,32 @@ async function removeFileByUuid(uuid) {
 	return response;
 }
 
+function getResultMessage(checkResults) {
+	let resultMessage = "";
+	checkResults.forEach(checkResult => {
+		if (checkResult.resultType == "REJECTED") {
+							
+			if (resultMessage != "") {
+				resultMessage += "<br>";
+			}
+							
+			switch (checkResult.checkName) {
+			case "Age check":
+				resultMessage += "Клиенту не может быть выдан кредит. " +
+					"Возраст клиента должен быть от 18 до " +
+					"60 (для женщин) или 65 (для мужчин) лет";
+				break;
+			case "Passport check":
+				resultMessage += "Паспорт просрочен. " + 
+					"Необходимо внести данные по актуальному паспорту клиента";
+				break;
+			}
+							
+		}
+	});
+	return resultMessage;
+}
+
 //обработчик нажатия на кнопку "Заполнить анкету"
 async function sendProfileHandler(event) {
 	
@@ -288,16 +314,34 @@ async function sendProfileHandler(event) {
 		
 		await $("#please-wait-dialog").modal('show');
 		
-		//раскомменчу, когда разберусь с модальным окошком
 		sendFormDataJson(formDataJson)
-			.then(() => {
+			.then(response => response.json())
+			.then(result => {
+				
+				console.log("result:");
+				console.log(result);
+				
+				let resultMessage = getResultMessage(result.checkResults);
 				
 				$("#please-wait-dialog").modal('hide');
+				
+				if (resultMessage != "") {
+					showErrorAlert(resultMessage);
+				}
+				else {
+					console.log("Good job!");
+				}
+				
+				
 				
 			})
 			.catch(() => {
 				$("#please-wait-dialog").modal('hide');
+				
+				showErrorAlert("Неизвестная ошибка. Повторите попытку позднее");
 			});
+			
+		
 		
 	}
 	else {
@@ -322,6 +366,7 @@ async function sendFormDataJson(formDataJson) {
 	});
 	
 	console.log(response);
+	return response;
 }
 
 //функция показа уведомления об ошибке
