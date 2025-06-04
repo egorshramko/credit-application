@@ -45,9 +45,13 @@ import com.example.credit.web.api.dto.BinaryContentDto;
 import com.example.credit.web.api.dto.profile.ClientProfileDto;
 import com.example.credit.web.api.dto.profile.ContactDto;
 import com.example.credit.web.api.mapper.ClientProfileMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonValue;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -144,7 +148,23 @@ public class ProfileController {
 		Iterable<CheckResult> checkResults = clientProfileService.checkAndUpdateProfile(profile);
 		
 		return ResponseEntity.ok()
-				.body(checkResults);
+				.contentType(MediaType.APPLICATION_JSON)				
+				.body(this.mapCheckResultsToJson(checkResults));
+	}
+	
+	private String mapCheckResultsToJson(Iterable<CheckResult> results) {
+		
+		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+		
+		for (CheckResult result : results) {
+			arrayBuilder.add(result.toJson());
+		}
+		
+		return Json.createObjectBuilder()
+				.add("checkResults", arrayBuilder)
+				.build()
+				.toString();
+		
 	}
 	
 	/**
