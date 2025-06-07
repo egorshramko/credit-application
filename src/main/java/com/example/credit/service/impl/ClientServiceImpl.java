@@ -99,9 +99,11 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	@Override
-	public Client updateClient(ClientProfile clientProfile) {
+	public Client updateClientFromProfile(Client client, ClientProfile clientProfile) {
 		
 		
+		
+		return null;
 	}
 
 }

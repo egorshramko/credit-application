@@ -12,7 +12,7 @@ public interface ClientService {
 
 	Client createClient(ClientDto clientDto);
 	
-	Client updateClient(ClientProfile clientProfile);
+	Client updateClientFromProfile(Client client, ClientProfile clientProfile);
 
 	Optional<Client> findClientById(String id);
 
