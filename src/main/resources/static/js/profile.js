@@ -324,6 +324,7 @@ async function sendProfileHandler(event) {
 			
 			let resultMessage = getResultMessage(result.checkResults);
 			
+			// TODO сделать, чтобы модальное окно стабильно закрывалось
 			console.log("Try to hide please wait dialog");
 			await $("#please-wait-dialog").modal('hide');
 			
@@ -337,10 +338,6 @@ async function sendProfileHandler(event) {
 		else {
 			showErrorAlert("Неизвестная ошибка. Повторите попытку позднее");
 		}
-		
-		
-		
-		
 		
 	}
 	else {
