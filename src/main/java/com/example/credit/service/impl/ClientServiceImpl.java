@@ -1,6 +1,7 @@
 package com.example.credit.service.impl;
 
 import com.example.credit.data.Client;
+import com.example.credit.data.ClientProfile;
 import com.example.credit.data.Passport;
 import com.example.credit.data.repository.ClientRepository;
 import com.example.credit.data.repository.PassportRepository;
@@ -95,6 +96,12 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public Optional<Client> findClientById(String id) {
 		return clientRepository.findById(Long.parseLong(id));
+	}
+	
+	@Override
+	public Client updateClient(ClientProfile clientProfile) {
+		
+		
 	}
 
 }
