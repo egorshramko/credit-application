@@ -314,33 +314,32 @@ async function sendProfileHandler(event) {
 		
 		await $("#please-wait-dialog").modal('show');
 		
-		sendFormDataJson(formDataJson)
-			.then(response => response.json())
-			.then(result => {
-				
-				console.log("result:");
-				console.log(result);
-				
-				let resultMessage = getResultMessage(result.checkResults);
-				
-				$("#please-wait-dialog").modal('hide');
-				
-				if (resultMessage != "") {
-					showErrorAlert(resultMessage);
-				}
-				else {
-					console.log("Good job!");
-				}
-				
-				
-				
-			})
-			.catch(() => {
-				$("#please-wait-dialog").modal('hide');
-				
-				showErrorAlert("Неизвестная ошибка. Повторите попытку позднее");
-			});
+		let checkResponse = await sendFormDataJson(formDataJson);
+		
+		if (checkResponse.ok) {
+			let result = await checkResponse.json();
 			
+			console.log("result:");
+			console.log(result);
+			
+			let resultMessage = getResultMessage(result.checkResults);
+			
+			console.log("Try to hide please wait dialog");
+			await $("#please-wait-dialog").modal('hide');
+			
+			if (resultMessage != "") {
+				showErrorAlert(resultMessage);
+			}
+			else {
+				console.log("Good job!");
+			}
+		}
+		else {
+			showErrorAlert("Неизвестная ошибка. Повторите попытку позднее");
+		}
+		
+		
+		
 		
 		
 	}
@@ -350,6 +349,7 @@ async function sendProfileHandler(event) {
 		showErrorAlert("Ошибка заполнения анкеты. Пожалуйста, исправьте ошибки на форме, а затем повторите попытку.");
 		
 	}
+	
 	
 }
 
