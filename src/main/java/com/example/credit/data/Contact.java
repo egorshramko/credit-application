@@ -38,6 +38,6 @@ public class Contact {
 	private String comment;
 	
 	@Transient
-	private UUID uuid;
+	private UUID uuid = UUID.randomUUID();
 
 }
