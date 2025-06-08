@@ -32,12 +32,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.credit.check.data.CheckResult;
 import com.example.credit.data.BinaryContent;
+import com.example.credit.data.Client;
 import com.example.credit.data.ClientProfile;
 import com.example.credit.data.Contact;
 import com.example.credit.data.Credit;
 import com.example.credit.data.enums.ContactType;
 import com.example.credit.data.enums.Sex;
 import com.example.credit.service.ClientProfileService;
+import com.example.credit.service.ClientService;
 import com.example.credit.service.CreditService;
 import com.example.credit.service.TempProfileService;
 import com.example.credit.storage.service.TempStorageService;
@@ -77,6 +79,9 @@ public class ProfileController {
 	
 	@Autowired
 	private ClientProfileMapper clientProfileMapper;
+	
+	@Autowired
+	private ClientService clientService;
 	
 	@ModelAttribute("sex")
 	public Sex[] addSexEnumToModel(Model model) {
@@ -145,7 +150,12 @@ public class ProfileController {
 		
 		profile = clientProfileMapper.updateProfileFromDto(profile, profileDto);
 		
-		Iterable<CheckResult> checkResults = clientProfileService.checkAndUpdateProfile(profile);
+		clientProfileService.updateProfile(profile);
+		
+		Client clientForUpdate = creditService.getClientByCreditId(Long.valueOf(creditId));
+		clientService.updateClientFromProfile(clientForUpdate, profile);
+		
+		Iterable<CheckResult> checkResults = clientProfileService.checkProfile(profile);
 		
 		return ResponseEntity.ok()
 				.contentType(MediaType.APPLICATION_JSON)				

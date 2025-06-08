@@ -53,7 +53,7 @@ public class ClientProfileServiceImpl implements ClientProfileService {
 	}
 	
 	@Override
-	public Iterable<CheckResult> checkAndUpdateProfile(ClientProfile clientProfile) {
+	public Iterable<CheckResult> checkProfile(ClientProfile clientProfile) {
 		Iterable<CheckResult> checkResults = checkService.checkProfile(clientProfile);
 		
 		//проверка, что все проверки пройдены
@@ -64,9 +64,9 @@ public class ClientProfileServiceImpl implements ClientProfileService {
 			}
 		}
 		
-		if (rejectedChecks == 0) {
-			this.updateProfile(clientProfile);
-		}
+//		if (rejectedChecks == 0) {
+//			this.updateProfile(clientProfile);
+//		}
 		
 		return checkResults;
 	}
