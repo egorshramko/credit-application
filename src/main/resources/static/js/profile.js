@@ -34,7 +34,7 @@ $("#passport-issue-place-input").on('input', passport_issue_place_input_handler)
 
 $("#consent-personal-data-input").on('change', consent_personal_data_input_handler);
 
-$("#return-index-link").on('click', return_index_link_handler);
+$("#return-index-link").on('click', return_index_link_handler_temp);
 $("#send-profile-btn").on('click', sendProfileHandler);
 
 //обработчик ввода фамилии
@@ -198,6 +198,12 @@ function birthdate_change_handler(event) {
 	
 	
 	
+}
+
+function return_index_link_handler_temp(event) {
+	event.preventDefault();
+	let link = event.target;
+	window.location = link.href;
 }
 
 async function return_index_link_handler(event) {
