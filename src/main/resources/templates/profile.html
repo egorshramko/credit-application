@@ -298,7 +298,7 @@
                             </div>
                             <div id="contacts-repeater" class="row">
                             	<!-- Подгрузка уже существующих контактов из БД -->
-                            	<div th:each="ct, ctIndex : *{contacts}" th:id="${'contact-' + ctIndex.index}" class="row my-2" th:value="${ct.uuid}">
+                            	<div th:each="ct, ctIndex : *{contacts}" th:id="${'contact-' + ctIndex.index}" class="row my-2 contact-element" th:value="${ct.uuid}">
                             		<div class="col-11">
                             			<div class="row">
                             				<div class="col-4">
