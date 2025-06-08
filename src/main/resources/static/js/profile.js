@@ -428,6 +428,7 @@ function mapFormData() {
 			contactElementId = contactElementId.replace('contact-', '');
 			
 			let contactData = {};
+			contactData.uuid = contact.getAttribute('value');
 			contactData.contactType = $("#contact-type-input-" + contactElementId).val();
 			contactData.phoneNumber = $("#contact-value-" + contactElementId).val();
 			contactData.comment = $("#contact-comment-" + contactElementId).val();
