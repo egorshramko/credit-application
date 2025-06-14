@@ -2,6 +2,7 @@ package com.example.credit.data;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +28,7 @@ public class PassportScan {
 
 	private final LocalDateTime createdDate = LocalDateTime.now();
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private BinaryContent scanFile;
 
 }
