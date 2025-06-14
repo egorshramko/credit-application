@@ -126,7 +126,7 @@ public class ClientServiceImpl implements ClientService {
 		client.setContacts(clientContacts);
 		client.setPhoto(clientProfile.getPhoto());
 		
-		return client;
+		return clientRepository.save(client);
 	}
 
 }

@@ -150,7 +150,7 @@ public class ProfileController {
 		
 		profile = clientProfileMapper.updateProfileFromDto(profile, profileDto);
 		
-		clientProfileService.updateProfile(profile);
+		profile = clientProfileService.updateProfile(profile);
 		session.setAttribute("profile", profile);
 		
 		Client clientForUpdate = creditService.getClientByCreditId(Long.valueOf(creditId));
