@@ -69,7 +69,7 @@ public class ClientProfile {
 	@JoinColumn(name = "profile")
 	private List<Contact> contacts;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private BinaryContent photo;
 	
 	public void addContact(Contact contact) {
