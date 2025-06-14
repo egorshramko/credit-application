@@ -339,6 +339,9 @@ async function sendProfileHandler(event) {
 			}
 			else {
 				console.log("Good job!");
+				console.log(window.location.href);
+				let locationArray = window.location.href.split('/');
+				window.location = '.';
 			}
 		}
 		else {

@@ -43,5 +43,10 @@ public class CreditController {
 		}
 
 	}
+	
+	@GetMapping("/")
+	public String redirectToCreditStageView(@PathVariable("id") String creditId) {
+		return "redirect:/credit/" + creditId;
+	}
 
 }
