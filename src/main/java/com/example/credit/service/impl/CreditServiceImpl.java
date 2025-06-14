@@ -135,5 +135,29 @@ public class CreditServiceImpl implements CreditService {
 								.map(credit -> credit.getBorrower())
 								.orElse(null);
 	}
+	
+	@Override
+	public Credit moveToNextStage(Credit credit) {
+		
+		CreditStage currentStage = credit.getStage();
+		switch (currentStage) {
+		case CREDIT_FORM:
+			credit.setStage(CreditStage.CREDIT_APPLICATION);
+		case CREDIT_APPLICATION:
+			credit.setStage(CreditStage.AGREEMENT_SIGNING);
+			break;
+		case AGREEMENT_SIGNING:
+			credit.setStage(CreditStage.COMPLETED);
+			break;
+		case REJECT:
+			credit.setStage(CreditStage.COMPLETED);
+			break;
+		default:
+			break;
+		}
+		
+		return creditRepository.save(credit);
+		
+	}
 
 }

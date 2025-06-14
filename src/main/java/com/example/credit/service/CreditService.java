@@ -20,5 +20,7 @@ public interface CreditService {
 	Iterable<Credit> getActiveCredits();
 
 	Credit fillCreditProfile(Credit credit);
+	
+	Credit moveToNextStage(Credit credit);
 
 }

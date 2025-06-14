@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.credit.check.data.CheckResult;
+import com.example.credit.check.data.enums.ResultType;
 import com.example.credit.data.BinaryContent;
 import com.example.credit.data.Client;
 import com.example.credit.data.ClientProfile;
@@ -138,6 +139,7 @@ public class ProfileController {
 
 	}
 	
+	//TODO: это говно нужно будет отрефакторить. Ну не должен контроллер иметь в себе бизнес логики, но сейчас мне насрать
 	@PostMapping
 	@ResponseBody
 	public ResponseEntity<?> fillProfile(@PathVariable("id") String creditId, 
@@ -157,6 +159,17 @@ public class ProfileController {
 		clientService.updateClientFromProfile(clientForUpdate, profile);
 		
 		Iterable<CheckResult> checkResults = clientProfileService.checkProfile(profile);
+		
+		int rejectedChecksCount = 0;
+		for (CheckResult result : checkResults) {
+			if (result.getResultType() == ResultType.REJECTED) {
+				rejectedChecksCount++;
+			}
+		}
+		
+		if (rejectedChecksCount == 0) {
+			creditService.moveToNextStage(creditService.getCreditById(creditId));
+		}
 		
 		return ResponseEntity.ok()
 				.contentType(MediaType.APPLICATION_JSON)				
