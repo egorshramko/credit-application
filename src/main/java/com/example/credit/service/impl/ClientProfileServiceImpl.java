@@ -47,7 +47,7 @@ public class ClientProfileServiceImpl implements ClientProfileService {
 	public ClientProfile updateProfile(ClientProfile profile) {
 		
 		passportRepository.save(profile.getPassport());
-		clientProfileRepository.save(profile);
+		profile = clientProfileRepository.save(profile);
 		
 		return profile;
 	}
