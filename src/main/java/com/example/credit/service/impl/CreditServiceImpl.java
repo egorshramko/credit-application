@@ -143,6 +143,7 @@ public class CreditServiceImpl implements CreditService {
 		switch (currentStage) {
 		case CREDIT_FORM:
 			credit.setStage(CreditStage.CREDIT_APPLICATION);
+			break;
 		case CREDIT_APPLICATION:
 			credit.setStage(CreditStage.AGREEMENT_SIGNING);
 			break;
