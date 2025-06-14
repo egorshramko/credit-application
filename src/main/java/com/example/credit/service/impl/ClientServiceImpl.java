@@ -2,6 +2,7 @@ package com.example.credit.service.impl;
 
 import com.example.credit.data.Client;
 import com.example.credit.data.ClientProfile;
+import com.example.credit.data.Contact;
 import com.example.credit.data.Passport;
 import com.example.credit.data.repository.ClientRepository;
 import com.example.credit.data.repository.PassportRepository;
@@ -101,9 +102,31 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public Client updateClientFromProfile(Client client, ClientProfile clientProfile) {
 		
+		client.setLastname(clientProfile.getLastname());
+		client.setFirstname(clientProfile.getFirstname());
+		client.setMiddlename(clientProfile.getMiddlename());
 		
+		client.setBirthdate(clientProfile.getBirthdate());
+		client.setCitizenship(clientProfile.getCitizenship());
 		
-		return null;
+		client.setSex(clientProfile.getSex());
+		client.setPassport(clientProfile.getPassport());
+		
+		client.setTin(clientProfile.getTin());
+		
+		List<Contact> clientContacts = new ArrayList<>();
+		for (Contact contact : clientProfile.getContacts()) {
+			clientContacts.add(Contact.builder()
+					.uuid(contact.getUuid())
+					.contactType(contact.getContactType())
+					.phoneNumber(contact.getPhoneNumber())
+					.comment(contact.getComment())
+					.build());
+		}
+		client.setContacts(clientContacts);
+		client.setPhoto(clientProfile.getPhoto());
+		
+		return client;
 	}
 
 }
