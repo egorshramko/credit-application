@@ -1,5 +1,6 @@
 package com.example.credit.data;
 
+import com.example.credit.application.data.Application;
 import com.example.credit.data.enums.CreditStage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -37,5 +38,8 @@ public class Credit {
 
 	@OneToOne
 	private ClientProfile profile;
+	
+	@OneToOne
+	private Application application;
 
 }
