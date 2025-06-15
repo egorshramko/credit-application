@@ -2,8 +2,12 @@ package com.example.credit.application.data;
 
 import java.time.LocalDateTime;
 
+import com.example.credit.application.data.enums.Currency;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -37,5 +41,9 @@ public class LoanProduct {
 	
 	@NotNull
 	private Integer maxAmount;
+	
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	private Currency currency;
 	
 }

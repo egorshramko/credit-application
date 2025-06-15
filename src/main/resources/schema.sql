@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS loan_product (
 	min_term BIGINT NOT NULL,
 	max_term BIGINT NOT NULL,
 	min_amount BIGINT NOT NULL,
-	max_amount BIGINT NOT NULL
+	max_amount BIGINT NOT NULL,
+	currency VARCHAR(255) NOT NULL
 );
