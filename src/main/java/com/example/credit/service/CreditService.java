@@ -22,5 +22,7 @@ public interface CreditService {
 	Credit fillCreditProfile(Credit credit);
 	
 	Credit moveToNextStage(Credit credit);
+	
+	Credit saveCredit(Credit credit);
 
 }

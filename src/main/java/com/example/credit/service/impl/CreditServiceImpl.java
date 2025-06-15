@@ -160,5 +160,10 @@ public class CreditServiceImpl implements CreditService {
 		return creditRepository.save(credit);
 		
 	}
+	
+	@Override
+	public Credit saveCredit(Credit credit) {
+		return creditRepository.save(credit);
+	}
 
 }
