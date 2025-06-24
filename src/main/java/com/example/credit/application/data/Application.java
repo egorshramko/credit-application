@@ -29,12 +29,13 @@ public class Application {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "application_seq")
 	private Long id;
 	
-	private LocalDateTime createdDate = LocalDateTime.now();
+	private final LocalDateTime createdDate = LocalDateTime.now();
 	
 	private Integer amount;
 	
 	@Enumerated(EnumType.STRING)
 	private TermUnit termUnit;
+	private Integer termValue;
 	private String purpose;
 	
 	@ManyToOne
