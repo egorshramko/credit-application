@@ -14,12 +14,21 @@ public class ApplicationMapper {
 
 	public ApplicationDto toDto(Application app) {
 		ApplicationDto dto = ApplicationDto.builder()
-				.termValue(app.getTermValue().intValue())
-				.termUnit(app.getTermUnit().toString())
-				.loanAmount(app.getAmount().intValue())
 				.loanPurpose(app.getPurpose())
 				.comment(app.getComment())
 				.build();
+		
+		if (app.getTermValue() != null) {
+			dto.setTermValue(app.getTermValue().intValue());
+		}
+		
+		if (app.getTermUnit() != null) {
+			dto.setTermUnit(app.getTermUnit().toString());
+		}
+		
+		if (app.getAmount() != null) {
+			dto.setLoanAmount(app.getAmount().intValue());
+		}
 		
 		LoanProduct appProduct = app.getProduct();
 		if (appProduct != null) {
