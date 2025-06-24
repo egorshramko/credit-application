@@ -42,6 +42,18 @@ public class ApplicationMapperTest {
 		Assertions.assertEquals(expectedDto, dto);
 	}
 	
+	@Test
+	public void toDto_whenApplicationIsEmpty_thenReturnDtoWithEmptyFields() {
+		Application app = Application.builder().build();
+		
+		ApplicationDto dto = applicationMapper.toDto(app);
+		
+		ApplicationDto expectedDto = ApplicationDto.builder().build();
+		
+		Assertions.assertNotNull(dto);
+		Assertions.assertEquals(expectedDto, dto);
+	}
+	
 	private ApplicationDto getFullFilledDto() {
 		return ApplicationDto.builder()
 				.currency("RUB")
